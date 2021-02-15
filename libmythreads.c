@@ -11,10 +11,10 @@ extern void threadInit(){
 }
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
-    /*pthread_t thread;
+    pthread_t thread;
     pthread_attr_t *attr;
 
-    //all of this could be completely wrong on how to set a stacksize for a thread idk
+    /*//all of this could be completely wrong on how to set a stacksize for a thread idk
     pthread_attr_init(attr);
     pthread_attr_setstacksize (attr, STACK_SIZE);
 
