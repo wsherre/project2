@@ -15,5 +15,5 @@ int main(){
 
     int p = 1;
 
-    printf("if it works this should be 0:  %d", threadCreate(t, (void*)&p));
+    printf("if it works this should be 0:  %d\n", threadCreate(t, (void*)&p));
 }
