@@ -16,7 +16,8 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
     //all of this could be completely wrong on how to set a stacksize for a thread idk
     pthread_attr_init(attr);
-    pthread_attr_setstacksize (attr, STACK_SIZE);
+    //pthread_attr_setstacksize (attr, STACK_SIZE);
+    pthread_create(thread, NULL, funcPtr, argPtr);
 /*
     if(pthread_create(&thread, attr, funcPtr, argPtr) == 0){
         return 0;
