@@ -12,7 +12,7 @@ extern void threadInit(){
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     pthread_t thread;
-    pthread_attr_t *attr;
+    pthread_attr_t *attr = NULL;
 
     //all of this could be completely wrong on how to set a stacksize for a thread idk
     pthread_attr_init(attr);
