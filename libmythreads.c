@@ -22,5 +22,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     }else{
         return -1;
     }*/
+    printf("hey\n");
+    return 0;
     
 }
