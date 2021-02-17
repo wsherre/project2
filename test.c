@@ -7,7 +7,7 @@ void *t(void* arg){
     printf("inside t1: %d\n", param);
     int *result = malloc(sizeof(int));
     *result = param++;
-    threadYield();
+    //threadYield();
     return result;
 }
 int main(){
