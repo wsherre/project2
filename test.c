@@ -18,7 +18,5 @@ int main(){
     threadInit();
     threadCreate(t, (void*)&p);
     threadCreate(t, (void*)&s);
-    printf("if here then it works and it should break\n\n");
-    print_lib();
-
+    printf("end of main\n\n");
 }

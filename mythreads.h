@@ -22,5 +22,3 @@ extern void threadSignal(int lockNum, int conditionNum);
 
 //this 
 extern int interruptsAreDisabled;
-
-extern void print_lib();

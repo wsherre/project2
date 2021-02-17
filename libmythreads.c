@@ -34,8 +34,6 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
-    printf("thread #: %d\n\n", thread_lib_size);
-    printf(thread_lib[thread_lib_size].active ? "true\n" : "false\n");
     thread_lib_size++;
     
     
@@ -54,11 +52,4 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
 extern void threadYield(){
     swapcontext(&(thread_lib[thread_lib_size].thread_context), &(thread_lib[main_thread].thread_context));
-}
-
-extern void print_lib(){
-    for(int i = 0; i <= thread_lib_size + 1; ++i){
-        if(thread_lib[i].active == true)
-            printf("activated thread:     %d\n", i);
-    }
 }
