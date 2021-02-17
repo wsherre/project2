@@ -11,6 +11,8 @@ typedef struct library{
 }library;
 
 library thread_lib[array_size];
+int thread_lib_size = 0;
+int main_thread = 0;
 
 extern void threadInit(){
     for(int i = 0; i < array_size; ++i){
@@ -18,6 +20,7 @@ extern void threadInit(){
     }
     getcontext(&(thread_lib[0].thread_context));
     thread_lib[0].active = true;
+    thread_lib_size++;
 }
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
@@ -29,13 +32,14 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     newcontext.uc_stack.ss_size = STACK_SIZE ;
     newcontext.uc_stack.ss_flags = 0;
 
-    thread_lib[1].thread_context = newcontext;
-    thread_lib[1].active = true;
+    thread_lib[thread_lib_size].thread_context = newcontext;
+    thread_lib[thread_lib_size].active = true;
+    thread_lib_size++;
 
     makecontext(&newcontext, ( void (*) ( void ))funcPtr, 1, argPtr);
 
     printf("swap to function\n");
-    swapcontext( &(thread_lib[0].thread_context), &newcontext);
+    swapcontext( &(thread_lib[main_thread].thread_context), &newcontext);
     
 
 
@@ -45,5 +49,12 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 }
 
 extern void threadYield(){
-    swapcontext(&(thread_lib[1].thread_context), &(thread_lib[0].thread_context));
+    swapcontext(&(thread_lib[thread_lib_size].thread_context), &(thread_lib[main_thread].thread_context));
+}
+
+extern void print_lib(){
+    for(int i = 0; i < thread_lib_size; ++i){
+        if(thread_lib[i].active == true)
+            printf("activated thread:     %d\n", i);
+    }
 }
