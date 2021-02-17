@@ -22,9 +22,10 @@ extern void threadInit(){
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
     }
-    getcontext(&(thread_lib[0].thread_context));
     thread_lib[main_thread].active = true;
     thread_lib_size++;
+    getcontext(&(thread_lib[main_thread].thread_context));
+    current_running_tid = main_thread;
 }
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
@@ -36,14 +37,13 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     newcontext.uc_stack.ss_size = STACK_SIZE ;
     newcontext.uc_stack.ss_flags = 0;
 
+    //int next_running_tid = thread_lib_size;
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
     thread_lib_size++;
     
-    
 
     makecontext(&newcontext, ( void (*) ( void ))wrapper_function, 2, funcPtr, argPtr);
-
     printf("swap to function\n");
     swapcontext( &(thread_lib[current_running_tid].thread_context), &newcontext);
     
@@ -62,7 +62,7 @@ extern void threadYield(){
 }
 
 extern void threadExit(void *result){
-    printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *((int*)result));
+    printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
     threadYield();
     //swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
 }
@@ -72,7 +72,7 @@ int next_thread(){
 
     do{
         i++;
-        if(i >= thread_lib_size)
+        if(i == thread_lib_size - 1)
             i = 0;
     }while(thread_lib[i].active == false);
     return i;
