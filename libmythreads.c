@@ -1,7 +1,7 @@
 #include "mythreads.h"
 #include <stdio.h>
 #include <pthread.h>
-#include <ucontext.h>
+#include <sys/ucontext.h>
 #define array_size 5000
 
 
