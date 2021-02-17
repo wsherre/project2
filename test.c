@@ -14,7 +14,9 @@ int main(){
 
 
     int p = 1;
+    int s = 2;
     threadCreate(t, (void*)&p);
+    threadCreate(t, (void*)&s);
     printf("if here then it works and it should break\n");
 
 }
