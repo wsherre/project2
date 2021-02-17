@@ -63,7 +63,8 @@ extern void threadYield(){
 
 extern void threadExit(void *result){
     printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *((int*)result));
-    swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
+    threadYield();
+    //swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
 }
 
 int next_thread(){
