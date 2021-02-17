@@ -8,7 +8,7 @@ libmythreads.o:
 libmythreads.a: libmythreads.o
 	ar -crvs libmythreads.a libmythreads.o
 test:
-	clang -o test test.c libmythreads.a
+	clang -o t test.c libmythreads.a
 
 clean:
 	rm -rf $(BINS) *.o *.dSYM *.a
