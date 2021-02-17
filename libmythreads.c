@@ -15,6 +15,8 @@ int thread_lib_size = 0;
 int main_thread = 0;
 int current_running_tid = 0;
 
+int next_thread();
+
 extern void threadInit(){
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
