@@ -16,6 +16,7 @@ int main_thread = 0;
 int current_running_tid = 0;
 
 int next_thread();
+void wrapper_function(thFuncPtr, void*);
 
 extern void threadInit(){
     for(int i = 0; i < array_size; ++i){
