@@ -54,7 +54,7 @@ extern void threadYield(){
 
 extern void print_lib(){
     for(int i = 0; i <= thread_lib_size; ++i){
-        if(thread_lib[i].active == true)
+        //if(thread_lib[i].active == true)
             printf("activated thread:     %d\n", i);
     }
 }
