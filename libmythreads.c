@@ -32,9 +32,10 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     newcontext.uc_stack.ss_size = STACK_SIZE ;
     newcontext.uc_stack.ss_flags = 0;
 
+    thread_lib_size++;
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
-    thread_lib_size++;
+    
 
     makecontext(&newcontext, ( void (*) ( void ))funcPtr, 1, argPtr);
 
@@ -54,7 +55,7 @@ extern void threadYield(){
 
 extern void print_lib(){
     for(int i = 0; i <= thread_lib_size; ++i){
-        //if(thread_lib[i].active == true)
+        if(thread_lib[i].active == true)
             printf("activated thread:     %d\n", i);
     }
 }
