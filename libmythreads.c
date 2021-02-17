@@ -41,7 +41,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
     
 
-    makecontext(&newcontext, ( void (*) ( void ))funcPtr, 1, argPtr);
+    makecontext(&newcontext, ( void (*) ( void ))wrapper_function, 2, funcPtr, argPtr);
 
     printf("swap to function\n");
     swapcontext( &(thread_lib[main_thread].thread_context), &newcontext);
@@ -60,6 +60,11 @@ extern void threadYield(){
     swapcontext(&(thread_lib[c].thread_context), &(thread_lib[current_running_tid].thread_context));
 }
 
+extern void threadExit(void *result){
+    printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *((int*)result));
+    swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
+}
+
 int next_thread(){
     int i = current_running_tid;
 
@@ -69,4 +74,10 @@ int next_thread(){
             i = 0;
     }while(thread_lib[i].active == false);
     return i;
+}
+
+void wrapper_function(thFuncPtr func, void* parameter){
+    void *result;
+    result = func(parameter);
+    threadExit(result);
 }
