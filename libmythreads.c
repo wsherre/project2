@@ -20,7 +20,6 @@ extern void threadInit(){
     }
     getcontext(&(thread_lib[0].thread_context));
     thread_lib[0].active = true;
-    thread_lib_size++;
 }
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
