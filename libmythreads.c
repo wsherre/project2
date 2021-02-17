@@ -37,7 +37,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     newcontext.uc_stack.ss_size = STACK_SIZE ;
     newcontext.uc_stack.ss_flags = 0;
 
-    //int next_running_tid = thread_lib_size;
+    int temp = current_running_tid;
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
     thread_lib_size++;
@@ -45,7 +45,8 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
     makecontext(&newcontext, ( void (*) ( void ))wrapper_function, 2, funcPtr, argPtr);
     printf("swap to function\n");
-    swapcontext( &(thread_lib[current_running_tid].thread_context), &newcontext);
+    current_running_tid++;
+    swapcontext( &(thread_lib[temp].thread_context), &newcontext);
     
 
 
