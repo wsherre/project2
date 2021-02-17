@@ -19,7 +19,8 @@ extern void threadInit(){
         thread_lib[i].active = false;
     }
     getcontext(&(thread_lib[0].thread_context));
-    thread_lib[0].active = true;
+    thread_lib[main_thread].active = true;
+    thread_lib_size++;
 }
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
@@ -31,9 +32,9 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     newcontext.uc_stack.ss_size = STACK_SIZE ;
     newcontext.uc_stack.ss_flags = 0;
 
-    thread_lib_size++;
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
+    thread_lib_size++;
     
 
     makecontext(&newcontext, ( void (*) ( void ))funcPtr, 1, argPtr);
