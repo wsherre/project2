@@ -34,6 +34,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
+    printf(thread_lib[thread_lib_size].active ? "true\n" : "false\n");
     thread_lib_size++;
     
     
