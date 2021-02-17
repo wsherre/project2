@@ -13,6 +13,7 @@ typedef struct library{
 library thread_lib[array_size];
 int thread_lib_size = 0;
 int main_thread = 0;
+int current_running_tid = 0;
 
 extern void threadInit(){
     for(int i = 0; i < array_size; ++i){
@@ -51,5 +52,17 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 }
 
 extern void threadYield(){
+    printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
     swapcontext(&(thread_lib[thread_lib_size].thread_context), &(thread_lib[main_thread].thread_context));
+}
+
+int next_thread(){
+    int i = current_running_tid + 1;
+
+    while(thread_lib[i].active == false){
+        if(i >= thread_lib_size)
+            i = 0;
+        i++;
+    }
+    return i;
 }
