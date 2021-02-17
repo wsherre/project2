@@ -19,6 +19,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     newcontext.uc_stack.ss_size = STACK_SIZE ;
     newcontext.uc_stack.ss_flags = 0;
     makecontext(&newcontext, funcPtr, 1, argPtr);
+    t(argPtr);
 
 
     printf("hey\n");
