@@ -55,6 +55,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
 extern void threadYield(){
     printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
+    current_running_tid = next_thread();
     swapcontext(&(thread_lib[thread_lib_size].thread_context), &(thread_lib[main_thread].thread_context));
 }
 
