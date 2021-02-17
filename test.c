@@ -15,6 +15,6 @@ int main(){
 
     int p = 1;
     threadCreate(t, (void*)&p);
-    printf("if here then it works and it should break");
+    printf("if here then it works and it should break\n");
 
 }
