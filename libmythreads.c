@@ -73,7 +73,9 @@ int next_thread(){
 
     do{
         i++;
-        if(i == thread_lib_size - 1)
+        if(i == thread_lib_size)
+            i = 0;
+        if(i == array_size)
             i = 0;
     }while(thread_lib[i].active == false);
     return i;
