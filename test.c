@@ -6,9 +6,9 @@ void *t(void* arg){
     int param = *((int*)arg);
     printf("inside t1\n");
     printf("%d\n", param);
-    int *result = malloc(sizeof(int));
-    *result = param++;
-    return result;
+    //int *result = malloc(sizeof(int));
+    //*result = param++;
+    //return result;
 }
 int main(){
 
