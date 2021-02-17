@@ -1,7 +1,7 @@
 #include "mythreads.h"
 #include <stdio.h>
-#include <pthread.h>
-#include <sys/ucontext.h>
+#include <stdlib.h>
+#include <ucontext.h>
 #define array_size 5000
 
 
@@ -11,19 +11,15 @@ extern void threadInit(){
 }
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
-    pthread_t thread;
-    pthread_attr_t *attr = NULL;
+    
+    ucontext_t newcontext;
 
-    //all of this could be completely wrong on how to set a stacksize for a thread idk
-    //pthread_attr_init(attr);
-    //pthread_attr_setstacksize (attr, STACK_SIZE);
-    pthread_create(&thread, NULL, funcPtr, argPtr);
-/*
-    if(pthread_create(&thread, attr, funcPtr, argPtr) == 0){
-        return 0;
-    }else{
-        return -1;
-    }*/
+    getcontext(&newcontext);
+    newcontext.uc_stack.ss_sp = malloc ( STACK_SIZE ) ;
+    newcontext.uc_stack.ss_size = STACK_SIZE ;
+    newcontext.uc_stack.ss_flags = 0;
+
+
     printf("hey\n");
     return 0;
     
