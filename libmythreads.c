@@ -18,6 +18,8 @@ int current_running_tid = 0;
 
 int next_thread();
 void wrapper_function(thFuncPtr, void*);
+static void interruptDisable ();
+static void interruptEnable ();
 
 extern void threadInit(){
     for(int i = 0; i < array_size; ++i){
@@ -32,6 +34,7 @@ extern void threadInit(){
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
+    interruptDisable();
     ucontext_t newcontext;
 
     getcontext(&newcontext);
@@ -49,6 +52,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     //printf("swap to function\n");
     current_running_tid = thread_lib_size - 1;
     int thread_id = current_running_tid;
+    interruptEnable();
     swapcontext( &(thread_lib[temp].thread_context), &newcontext);
     
 
@@ -59,13 +63,16 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 }
 
 extern void threadYield(){
-    printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
-    int current = current_running_tid;
-    current_running_tid = next_thread();
-    swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+    if(!interruptsAreDisabled){
+        printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
+        int current = current_running_tid;
+        current_running_tid = next_thread();
+        swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+    }
 }
 
 extern void threadJoin(int thread_id, void **result){
+    interruptDisable();
     printf("in thread join c thread:  %d", current_running_tid);
     if(thread_lib[thread_id].active == true){
         int current = current_running_tid;
@@ -73,13 +80,16 @@ extern void threadJoin(int thread_id, void **result){
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
     }
     *result = exited_lib[thread_id];
+    interruptEnable();
 }
 
 extern void threadExit(void *result){
+    interruptDisable();
     exited_lib[current_running_tid] = result;
     thread_lib[current_running_tid].active = false;
     //printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
     //threadYield();
+    interruptEnable();
     swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
 }
 
@@ -100,4 +110,13 @@ void wrapper_function(thFuncPtr func, void* parameter){
     void *result;
     result = func(parameter);
     threadExit(result);
+}
+
+static void interruptDisable () {
+    assert (! interruptsAreDisabled ) ;
+    interruptsAreDisabled = 1;
+}
+static void interruptEnable () {
+    assert ( interruptsAreDisabled ) ;
+    interruptsAreDisabled = 0;
 }
