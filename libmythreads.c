@@ -46,20 +46,20 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
 
     makecontext(&newcontext, ( void (*) ( void ))wrapper_function, 2, funcPtr, argPtr);
-    printf("swap to function\n");
+    //printf("swap to function\n");
     current_running_tid = thread_lib_size - 1;
     int thread_id = current_running_tid;
     swapcontext( &(thread_lib[temp].thread_context), &newcontext);
     
 
 
-    printf("swapped backed to threadcreate      threadid    %d\n", thread_id);
+    //printf("swapped backed to threadcreate      threadid    %d\n", thread_id);
     return thread_id;
     
 }
 
 extern void threadYield(){
-    printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
+    //printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
     int current = current_running_tid;
     current_running_tid = next_thread();
     swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
@@ -72,7 +72,7 @@ extern void threadJoin(int thread_id, void **result){
 extern void threadExit(void *result){
     exited_lib[current_running_tid] = result;
     thread_lib[current_running_tid].active = false;
-    printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
+    //printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
     threadYield();
     //swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
 }
