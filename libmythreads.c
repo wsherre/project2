@@ -4,100 +4,174 @@
 #include <ucontext.h>
 #include <stdbool.h>
 #include <assert.h>
+//i randomly picked a number between 4999 and 5001 exclusive and got this random number
 #define array_size 5000
 
 //struct that will hold contents of my library
+//thread_context: context of the thread
+//active - if the thread is active and has a workable context
+//isExited - if the thread has already been used and finished it's tasks
 typedef struct library{
     ucontext_t thread_context;
     bool active;
+    bool isExited;
 }library;
 
+//make an array of structs to hold all the threads information
+//the threads unique id will be the index of the array, main's id will be 0
 library thread_lib[array_size];
+//array of void*. this is for threadJoin to find the results of exited threads
 void* exited_lib[array_size];
+
+//making globals
 int thread_lib_size = 0;
 int main_thread = 0;
+//keeps track of which thread is running
 int current_running_tid = 0;
 int interruptsAreDisabled;
 
+//declaring helper functions
 int next_thread();
 void wrapper_function(thFuncPtr, void*);
 static void interruptDisable ();
 static void interruptEnable ();
 
+//initialie the arrays and set the context of the main thread
+//also allow interrupts
 extern void threadInit(){
+    //initialize some stuff
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
+        thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
+
     }
+    //activated the main thread and increase the size
     thread_lib[main_thread].active = true;
     thread_lib_size++;
+
+    //save the main threads context
     getcontext(&(thread_lib[main_thread].thread_context));
     current_running_tid = main_thread;
-    interruptsAreDisabled = 1;
+
+    //allow the program to be rude and interrupt us
+    interruptsAreDisabled = 0;
 }
 
+//create a thread yayyy
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
+    //disable interrupts so this is a smooth process
     if(!interruptsAreDisabled) interruptDisable();
     ucontext_t newcontext;
 
+    //i think this is redundant (cause we save in swap context) but so is my life so im gonna make sure we're both running
     getcontext(&newcontext);
+
+    //set the stack size of the context
     newcontext.uc_stack.ss_sp = malloc ( STACK_SIZE ) ;
     newcontext.uc_stack.ss_size = STACK_SIZE ;
+
+    //spent 30 minutes trying to look up what this means and still have no clue
     newcontext.uc_stack.ss_flags = 0;
 
+    //create the temporary id that is the current running id
+    //this is because the running id can change later so this remembers what the current context # is in the array
     int temp = current_running_tid;
+
+    //activate
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
     thread_lib_size++;
     
 
+    //make a context for this thread. call the wrapper function and pass this function in and its argument
+    //details of the wrapper function are way below
     makecontext(&newcontext, ( void (*) ( void ))wrapper_function, 2, funcPtr, argPtr);
-    //printf("swap to function\n");
+    
+    //right now im not reusing thread ids so the running thread will be the end of the array
     current_running_tid = thread_lib_size - 1;
+
+    //save thread id so when we return the function can return the proper value
     int thread_id = current_running_tid;
+
+    //allow interrupts to happen again
     interruptEnable();
+
+    //if i messed up there's no going back now
     swapcontext( &(thread_lib[temp].thread_context), &newcontext);
     
-
-
-    //printf("swapped backed to threadcreate      threadid    %d\n", thread_id);
+    //the current running thread id could be up to like 5000 but luckily we saved it beforehand so we're good
     return thread_id;
     
 }
 
+//change a thread yayyy
 extern void threadYield(){
+    
+    //make sure we're allowed to interrupt becuase we don't want to be rude
     if(!interruptsAreDisabled){
-        //printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
+
+        //save the current thread number
         int current = current_running_tid;
+
+        //get the next thread in our array, if we're at the end then we go back to 0
         current_running_tid = next_thread();
+
+        //bye
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
     }
 }
 
+//join a thread yayyy
 extern void threadJoin(int thread_id, void **result){
-    interruptDisable();
-    //printf("in thread join c thread:  %d\n", current_running_tid);
+    
+    //if the thread is active we gotta finish it
     if(thread_lib[thread_id].active == true){
+
+        //i dont wanna stop - ozzy ozbourne
+        interruptDisable();
         int current = current_running_tid;
         current_running_tid = thread_id;
+
+        //swap into thread and now it should run to completion or exit
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+
+        // if not wanna stop. i wanna stop - not ozzy osbourne
+        if( interruptsAreDisabled) interruptEnable();
     }
-    *result = exited_lib[thread_id];
-    if( interruptsAreDisabled) interruptEnable();
+
+    //if the thread has exited then this value will be true. 
+    //if false then the thread never existed. just like my work ethic in an engl class
+    if(thread_lib[thread_id].isExited == true ) *result = exited_lib[thread_id];
 }
 
+//exit a thread yayyy
 extern void threadExit(void *result){
+    //i dont wann stop - ozzy osbourne
     if( ! interruptsAreDisabled) interruptDisable();
+
+    /*the value passed into this function will be set as the result of the thread
+    if a thread normally returns it will still call thread exit so regardless of
+    what happpens to a thread it will go through this function*/
     exited_lib[current_running_tid] = result;
+
+    //nothing is ever free appparently. not even meaningless bytes of data
     free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
+    
+    //unactivate and set isExited to true for reasons mentioned in threadJoin
     thread_lib[current_running_tid].active = false;
-    //printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
-    //threadYield();
+    thread_lib[current_running_tid].isExited = true;
+    
+    //i wanna stop - not ozzy osbourne
     if( interruptsAreDisabled) interruptEnable();
+    
+    //i actually have no idea what i should do when a thread exits so for now
+    // im just going back to the main thread
     setcontext(&(thread_lib[main_thread].thread_context));
 }
 
+//this function just returns the index of the next active thread to run
 int next_thread(){
     int i = current_running_tid;
 
@@ -111,16 +185,22 @@ int next_thread(){
     return i;
 }
 
+/* okay so apparently i get a bunch of seg faults when i pass a function into make context and run it
+because the computer has no idea what to do after it finishes. so i decided to make a wrapper function
+so that the func when finished will have a path to keep going down after its done
+then it will call thread exit which take care of carefully and completely disembowling everything 
+that thread used to be and throwing it away*/
 void wrapper_function(thFuncPtr func, void* parameter){
-    void *result;
-    result = func(parameter);
-    threadExit(result);
+    threadExit(func(parameter));
 }
 
+//i dont wanna stop - ozzy osbourne
 static void interruptDisable () {
     assert (! interruptsAreDisabled ) ;
     interruptsAreDisabled = 1;
 }
+
+//i wanna stop - not ozzy osbourne
 static void interruptEnable () {
     assert ( interruptsAreDisabled ) ;
     interruptsAreDisabled = 0;

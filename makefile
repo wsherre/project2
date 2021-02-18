@@ -11,4 +11,4 @@ test:
 	clang -o t test.c libmythreads.a
 
 clean:
-	rm -rf $(BINS) *.o *.dSYM *.a
+	rm -rf *.o *.dSYM *.a
