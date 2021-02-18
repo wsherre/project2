@@ -66,7 +66,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
 extern void threadYield(){
     if(!interruptsAreDisabled){
-        printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
+        //printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
         int current = current_running_tid;
         current_running_tid = next_thread();
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
@@ -75,7 +75,7 @@ extern void threadYield(){
 
 extern void threadJoin(int thread_id, void **result){
     interruptDisable();
-    printf("in thread join c thread:  %d\n", current_running_tid);
+    //printf("in thread join c thread:  %d\n", current_running_tid);
     if(thread_lib[thread_id].active == true){
         int current = current_running_tid;
         current_running_tid = thread_id;
