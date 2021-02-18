@@ -82,7 +82,7 @@ extern void threadJoin(int thread_id, void **result){
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
     }
     *result = exited_lib[thread_id];
-    interruptEnable();
+    if( interruptsAreDisabled) interruptEnable();
 }
 
 extern void threadExit(void *result){
