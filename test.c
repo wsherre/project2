@@ -33,10 +33,10 @@ int main(){
   threadInit();
 
   id1 = threadCreate(t, (void *)&p1);
-  printf("created thread 1.     %d\n", id1);
+  printf("created thread 1.\n");
 
   id2 = threadCreate(t, (void *)&p2);
-  printf("created thread 2.     %d\n", id2);
+  printf("created thread 2.\n");
 
   threadJoin(id1, (void *)&result1);
   printf("joined #1 --> %d.\n", *result1);
