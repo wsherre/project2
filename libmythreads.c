@@ -6,6 +6,7 @@
 #include <assert.h>
 #define array_size 5000
 
+//struct that will hold contents of my library
 typedef struct library{
     ucontext_t thread_context;
     bool active;
@@ -94,7 +95,7 @@ extern void threadExit(void *result){
     //printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
     //threadYield();
     if( interruptsAreDisabled) interruptEnable();
-    swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
+    setcontext(&(thread_lib[main_thread].thread_context));
 }
 
 int next_thread(){
