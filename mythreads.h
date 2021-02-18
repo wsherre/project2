@@ -6,6 +6,7 @@
 
 //the type of function used to run your threads
 typedef void *(*thFuncPtr) (void *); 
+extern int interruptsAreDisabled;
 
 extern void threadInit();
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr); 
@@ -21,4 +22,3 @@ extern void threadWait(int lockNum, int conditionNum);
 extern void threadSignal(int lockNum, int conditionNum); 
 
 //this 
-extern int interruptsAreDisabled;
