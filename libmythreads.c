@@ -89,6 +89,7 @@ extern void threadJoin(int thread_id, void **result){
 extern void threadExit(void *result){
     if( ! interruptsAreDisabled) interruptDisable();
     exited_lib[current_running_tid] = result;
+    free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
     thread_lib[current_running_tid].active = false;
     //printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
     //threadYield();
