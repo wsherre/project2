@@ -32,12 +32,12 @@ extern void threadInit(){
     thread_lib_size++;
     getcontext(&(thread_lib[main_thread].thread_context));
     current_running_tid = main_thread;
-    interruptsAreDisabled = 0;
+    interruptsAreDisabled = 1;
 }
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
-    interruptDisable();
+    if(!interruptsAreDisabled) interruptDisable();
     ucontext_t newcontext;
 
     getcontext(&newcontext);
