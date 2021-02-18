@@ -3,12 +3,19 @@
 #include <stdlib.h>
 
 void *t(void* arg){
-    int param = *((int*)arg);
-    printf("inside t1: %d\n", param);
-    int *result = malloc(sizeof(int));
-    *result = param++;
-    //threadYield();
-    return result;
+    int param = *((int *)arg);
+  printf("t1 started %d\n", param);
+
+  //threadYield();
+
+  int *result = malloc(sizeof(int));
+  *result = param + 1;
+  printf("added 1! (%d)\n", *result);
+
+  //threadYield();
+
+  printf("t1: done result=%d\n", *result);
+  return result;
 }
 int main(){
 
