@@ -171,6 +171,12 @@ extern void threadExit(void *result){
     setcontext(&(thread_lib[main_thread].thread_context));
 }
 
+//empty function stubs. i have no idea how to do this yet
+extern void threadLock(int lockNum){}
+extern void threadUnlock(int lockNum){}
+extern void threadWait(int lockNum, int conditionNum){}
+extern void threadSignal(int lockNum, int conditionNum){} 
+
 //this function just returns the index of the next active thread to run
 int next_thread(){
     int i = current_running_tid;
