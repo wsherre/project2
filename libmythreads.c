@@ -53,7 +53,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
 
     printf("swapped backed to threadcreate\n");
-    return 0;
+    return current_running_tid;
     
 }
 
@@ -64,8 +64,13 @@ extern void threadYield(){
     swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
 }
 
+extern void threadJoin(int thread_id, void **result){
+    *result = exited_lib[thread_id];
+}
+
 extern void threadExit(void *result){
     exited_lib[current_running_tid] = result;
+    thread_lib[current_running_tid].active = false;
     printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
     threadYield();
     //swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));

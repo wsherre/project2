@@ -13,12 +13,27 @@ void *t(void* arg){
 int main(){
 
 
-    int p = 1;
-    int s = 2;
-    threadInit();
-    printf("t1\n\n");
-    threadCreate(t, (void*)&p);
-    printf("t2\n\n");
-    threadCreate(t, (void*)&s);
-    printf("end of main\n\n");
+    int id1, id2;
+  int p1;
+  int p2;
+
+  p1 = 23;
+  p2 = 2;
+
+  int *result1, *result2;
+
+  // initialize the threading library. DON'T call this more than once!!!
+  threadInit();
+
+  id1 = threadCreate(t, (void *)&p1);
+  printf("created thread 1.\n");
+
+  id2 = threadCreate(t, (void *)&p2);
+  printf("created thread 2.\n");
+
+  threadJoin(id1, (void *)&result1);
+  printf("joined #1 --> %d.\n", *result1);
+
+  threadJoin(id2, (void *)&result2);
+  printf("joined #2 --> %d.\n", *result2);
 }
