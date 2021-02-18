@@ -75,7 +75,7 @@ extern void threadYield(){
 
 extern void threadJoin(int thread_id, void **result){
     interruptDisable();
-    printf("in thread join c thread:  %d", current_running_tid);
+    printf("in thread join c thread:  %d\n", current_running_tid);
     if(thread_lib[thread_id].active == true){
         int current = current_running_tid;
         current_running_tid = thread_id;
@@ -86,7 +86,7 @@ extern void threadJoin(int thread_id, void **result){
 }
 
 extern void threadExit(void *result){
-    interruptDisable();
+    if( ! interruptsAreDisabled) interruptDisable();
     exited_lib[current_running_tid] = result;
     thread_lib[current_running_tid].active = false;
     //printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
