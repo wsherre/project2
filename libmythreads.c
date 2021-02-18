@@ -11,6 +11,7 @@ typedef struct library{
 }library;
 
 library thread_lib[array_size];
+void* exited_lib[array_size];
 int thread_lib_size = 0;
 int main_thread = 0;
 int current_running_tid = 0;
@@ -21,6 +22,7 @@ void wrapper_function(thFuncPtr, void*);
 extern void threadInit(){
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
+        exited_lib[i] = NULL;
     }
     thread_lib[main_thread].active = true;
     thread_lib_size++;
@@ -57,12 +59,13 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
 extern void threadYield(){
     printf("c thread: %d         next active thread: %d\n", current_running_tid, next_thread());
-    int c = current_running_tid;
+    int current = current_running_tid;
     current_running_tid = next_thread();
-    swapcontext(&(thread_lib[c].thread_context), &(thread_lib[current_running_tid].thread_context));
+    swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
 }
 
 extern void threadExit(void *result){
+    exited_lib[current_running_tid] = result;
     printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
     threadYield();
     //swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
