@@ -16,6 +16,7 @@ void* exited_lib[array_size];
 int thread_lib_size = 0;
 int main_thread = 0;
 int current_running_tid = 0;
+int interruptsAreDisabled;
 
 int next_thread();
 void wrapper_function(thFuncPtr, void*);
