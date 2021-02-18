@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ucontext.h>
 #include <stdbool.h>
+#include <assert.h>
 #define array_size 5000
 
 typedef struct library{
