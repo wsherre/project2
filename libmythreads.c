@@ -53,7 +53,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
 
     printf("swapped backed to threadcreate\n");
-    return current_running_tid;
+    return temp;
     
 }
 
