@@ -91,7 +91,7 @@ extern void threadExit(void *result){
     thread_lib[current_running_tid].active = false;
     //printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
     //threadYield();
-    interruptEnable();
+    if( interruptsAreDisabled) interruptEnable();
     swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
 }
 
