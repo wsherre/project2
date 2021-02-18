@@ -66,10 +66,9 @@ extern void threadYield(){
 }
 
 extern void threadJoin(int thread_id, void **result){
-    printf("current thread in therad join %d\n\n", current_running_tid);
-    /*if(thread_lib[thread_id].active == true){
+    if(thread_lib[thread_id].active == true){
         swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[thread_id].thread_context));
-    }*/
+    }
     *result = exited_lib[thread_id];
 }
 
@@ -77,8 +76,8 @@ extern void threadExit(void *result){
     exited_lib[current_running_tid] = result;
     thread_lib[current_running_tid].active = false;
     //printf("in thread exit, thread id: %d     result: %d\n", current_running_tid, *(int*)result);
-    threadYield();
-    //swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
+    //threadYield();
+    swapcontext(&(thread_lib[current_running_tid].thread_context), &(thread_lib[main_thread].thread_context));
 }
 
 int next_thread(){
