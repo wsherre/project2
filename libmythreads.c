@@ -47,7 +47,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
 
     makecontext(&newcontext, ( void (*) ( void ))wrapper_function, 2, funcPtr, argPtr);
     printf("swap to function\n");
-    current_running_tid = thread_lib_size;
+    current_running_tid = thread_lib_size - 1;
     swapcontext( &(thread_lib[temp].thread_context), &newcontext);
     
 
