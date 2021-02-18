@@ -4,7 +4,7 @@ CFLAGS=-Wall -g
 all: libmythreads.a
 
 libmythreads.o:
-	clang -Wall -c libmythreads.c
+	clang -Wall -c -g libmythreads.c
 libmythreads.a: libmythreads.o
 	ar -crvs libmythreads.a libmythreads.o
 test:
