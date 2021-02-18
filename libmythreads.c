@@ -16,7 +16,6 @@ void* exited_lib[array_size];
 int thread_lib_size = 0;
 int main_thread = 0;
 int current_running_tid = 0;
-extern interruptsAreDisabled = 0;
 
 int next_thread();
 void wrapper_function(thFuncPtr, void*);
@@ -32,6 +31,7 @@ extern void threadInit(){
     thread_lib_size++;
     getcontext(&(thread_lib[main_thread].thread_context));
     current_running_tid = main_thread;
+    interruptsAreDisabled = 0;
 }
 
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
