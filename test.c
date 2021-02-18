@@ -16,7 +16,9 @@ int main(){
     int p = 1;
     int s = 2;
     threadInit();
+    printf("t1\n\n");
     threadCreate(t, (void*)&p);
-    //threadCreate(t, (void*)&s);
+    printf("t2\n\n");
+    threadCreate(t, (void*)&s);
     printf("end of main\n\n");
 }
