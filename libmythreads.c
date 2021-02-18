@@ -52,7 +52,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
 
 
-    printf("swapped backed to threadcreate\n");
+    printf("swapped backed to threadcreate      threadid    %d\n", temp);
     return temp;
     
 }
