@@ -9,6 +9,13 @@ void *t(void* arg){
     threadUnlock(lock[0]);
     return NULL;
 }
+void *t1(void* arg){
+    threadLock(lock[0]);
+    threadYield();
+    num--;
+    threadUnlock(lock[0]);
+    return NULL;
+}
 int main(){
 
 
@@ -26,7 +33,7 @@ int main(){
 
   
   id1 = threadCreate(t, NULL);
-  id2 = threadCreate(t, NULL);
+  id2 = threadCreate(t1, NULL);
   threadJoin(id1, (void *)&result1);
   printf("thread1: %d\n", num);
   threadJoin(id2, (void *)&result1);
