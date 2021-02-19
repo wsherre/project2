@@ -28,7 +28,7 @@ int main(){
   id1 = threadCreate(t, NULL);
   id2 = threadCreate(t, NULL);
   threadJoin(id1, (void *)&result1);
-  printf("thread1: %d\n", *result1);
+  printf("thread1: %d\n", num);
   threadJoin(id2, (void *)&result1);
-  printf("thread2: %d\n", *result1);
+  printf("thread2: %d\n", num);
 }
