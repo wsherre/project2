@@ -23,6 +23,10 @@ library thread_lib[array_size];
 //array of void*. this is for threadJoin to find the results of exited threads
 void* exited_lib[array_size];
 
+bool lock[NUM_LOCKS];
+
+bool condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
+
 //making globals
 int thread_lib_size = 0;
 int main_thread = 0;
@@ -45,6 +49,12 @@ extern void threadInit(){
         thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
 
+    }
+    for(int i = 0; i < NUM_LOCKS; ++i){
+        lock[i] = false;
+        for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
+            condition[i][k] = false;
+        }
     }
     //activated the main thread and increase the size
     thread_lib[main_thread].active = true;
@@ -111,15 +121,19 @@ extern void threadYield(){
     
     //make sure we're allowed to interrupt becuase we don't want to be rude
     if(!interruptsAreDisabled){
-
+        //make sure we aren't interrupted during a yield which would be extremely rude
+        interruptDisable();
         //save the current thread number
         int current = current_running_tid;
 
         //get the next thread in our array, if we're at the end then we go back to 0
         current_running_tid = next_thread();
 
-        //bye
+        //allow us to be interrupted again and pray the next line runs before another interrupt
+        interruptEnable();
+
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+        //commenting under this line so a timer doesn't interrupt in the middle of a comment and swapcontext doesn't get called
     }
 }
 
@@ -172,10 +186,41 @@ extern void threadExit(void *result){
 }
 
 //empty function stubs. i have no idea how to do this yet
-extern void threadLock(int lockNum){}
-extern void threadUnlock(int lockNum){}
-extern void threadWait(int lockNum, int conditionNum){}
-extern void threadSignal(int lockNum, int conditionNum){} 
+extern void threadLock(int lockNum){
+    if(!interruptsAreDisabled) interruptDisable();
+    if(!lock[lockNum]){
+        lock[lockNum] = true;
+    }else{
+        while(lock[lockNum]){
+            if(interruptsAreDisabled) interruptEnable();
+            threadYield();
+        }
+        if(!interruptsAreDisabled) interruptDisable();
+        lock[lockNum] = true;
+    }
+    if(interruptsAreDisabled) interruptEnable();
+}
+extern void threadUnlock(int lockNum){
+    lock[lockNum] = false;
+}
+extern void threadWait(int lockNum, int conditionNum){
+    if(!lock[lockNum]){
+        printf("Error thread: %d called threadWait without having the lock", current_running_tid);
+        exit(1);
+    }else{
+        threadUnlock(lockNum);
+        while(!condition[lockNum][conditionNum]){
+            threadYield();
+        }
+        threadLock(lockNum);
+        if(!interruptsAreDisabled) interruptDisable();
+        condition[lockNum][conditionNum] = false;
+        if(interruptsAreDisabled) interruptEnable();
+    }
+}
+extern void threadSignal(int lockNum, int conditionNum){
+    condition[lockNum][conditionNum] = true;
+}
 
 //this function just returns the index of the next active thread to run
 int next_thread(){
