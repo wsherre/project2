@@ -187,17 +187,19 @@ extern void threadExit(void *result){
 
 //empty function stubs. i have no idea how to do this yet
 extern void threadLock(int lockNum){
+    interruptDisable();
     if(!lock[lockNum]){
         lock[lockNum] = true;
+        interruptEnable();
     }else{
         while(lock[lockNum]){
-           
+           interruptEnable();
             threadYield();
         }
         interruptDisable();
         lock[lockNum] = true;
+        interruptEnable();
     }
-    interruptEnable();
 }
 extern void threadUnlock(int lockNum){
     lock[lockNum] = false;
