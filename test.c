@@ -7,6 +7,7 @@ void *t(void* arg){
     threadYield();
     num++;
     threadUnlock(lock[0]);
+    return NULL;
 }
 int main(){
 
