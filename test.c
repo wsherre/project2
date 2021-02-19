@@ -3,17 +3,17 @@
 #include <stdlib.h>
 int num = 0;
 void *t(void* arg){
-    threadLock(lock[0]);
+    threadLock(0);
     threadYield();
     num++;
-    threadUnlock(lock[0]);
+    threadUnlock(0);
     return NULL;
 }
 void *t1(void* arg){
-    threadLock(lock[0]);
+    threadLock(0);
     threadYield();
     num--;
-    threadUnlock(lock[0]);
+    threadUnlock(0);
     return NULL;
 }
 int main(){
