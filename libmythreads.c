@@ -148,11 +148,11 @@ extern void threadJoin(int thread_id, void **result){
         int current = current_running_tid;
         current_running_tid = thread_id;
 
-        //swap into thread and now it should run to completion or exit
-        swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
-
         // if not wanna stop. i wanna stop - not ozzy osbourne
         if( interruptsAreDisabled) interruptEnable();
+
+        //swap into thread and now it should run to completion or exit
+        swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
     }
 
     //if the thread has exited then this value will be true. 
@@ -197,7 +197,7 @@ extern void threadLock(int lockNum){
         interruptDisable();
         lock[lockNum] = true;
     }
-    if(interruptsAreDisabled) interruptEnable();
+    interruptEnable();
 }
 extern void threadUnlock(int lockNum){
     lock[lockNum] = false;
@@ -212,9 +212,9 @@ extern void threadWait(int lockNum, int conditionNum){
             threadYield();
         }
         threadLock(lockNum);
-        if(!interruptsAreDisabled) interruptDisable();
+        interruptDisable();
         condition[lockNum][conditionNum] = false;
-        if(interruptsAreDisabled) interruptEnable();
+        interruptEnable();
     }
 }
 extern void threadSignal(int lockNum, int conditionNum){
