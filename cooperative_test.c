@@ -8,7 +8,9 @@ void *t1(void *arg) {
   int param = *((int *)arg);
   printf("t1 started %d\n", param);
 
+  threadLock(param % 10);
   threadYield();
+  threadUnlock(param % 10);
 
   int *result = malloc(sizeof(int));
   *result = param + 1;
