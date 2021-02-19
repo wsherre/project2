@@ -11,7 +11,6 @@ void *t(void* arg){
 }
 void *t1(void* arg){
     threadLock(0);
-    threadYield();
     num--;
     threadUnlock(0);
     return NULL;
