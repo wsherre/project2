@@ -149,7 +149,7 @@ extern void threadJoin(int thread_id, void **result){
         current_running_tid = thread_id;
 
         // if not wanna stop. i wanna stop - not ozzy osbourne
-        if( interruptsAreDisabled) interruptEnable();
+        interruptEnable();
 
         //swap into thread and now it should run to completion or exit
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
@@ -185,7 +185,7 @@ extern void threadExit(void *result){
     setcontext(&(thread_lib[main_thread].thread_context));
 }
 
-//empty function stubs. i have no idea how to do this yet
+//should lock this thread
 extern void threadLock(int lockNum){
     interruptDisable();
     if(!lock[lockNum]){
@@ -201,9 +201,13 @@ extern void threadLock(int lockNum){
         interruptEnable();
     }
 }
+//should unlock
 extern void threadUnlock(int lockNum){
+    interruptDisable();
     lock[lockNum] = false;
+    interruptEnable();
 }
+//if it works it will do what it the write up tells it to do
 extern void threadWait(int lockNum, int conditionNum){
     if(!lock[lockNum]){
         printf("Error thread: %d called threadWait without having the lock", current_running_tid);
@@ -213,12 +217,13 @@ extern void threadWait(int lockNum, int conditionNum){
         while(!condition[lockNum][conditionNum]){
             threadYield();
         }
-        threadLock(lockNum);
         interruptDisable();
+        threadLock(lockNum);
         condition[lockNum][conditionNum] = false;
         interruptEnable();
     }
 }
+//sets the condition to true for that lock
 extern void threadSignal(int lockNum, int conditionNum){
     condition[lockNum][conditionNum] = true;
 }
