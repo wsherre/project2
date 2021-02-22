@@ -145,8 +145,8 @@ extern void threadJoin(int thread_id, void **result){
 
         //i dont wanna stop - ozzy ozbourne
         interruptDisable();
-        int current = current_running_tid;
-        current_running_tid = thread_id;
+        //int current = current_running_tid;
+        //current_running_tid = thread_id;
 
         // if not wanna stop. i wanna stop - not ozzy osbourne
         interruptEnable();
