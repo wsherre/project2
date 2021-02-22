@@ -152,7 +152,8 @@ extern void threadJoin(int thread_id, void **result){
         interruptEnable();
 
         //swap into thread and now it should run to completion or exit
-        swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+        threadYield();
+        //swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
     }
 
     //if the thread has exited then this value will be true. 
