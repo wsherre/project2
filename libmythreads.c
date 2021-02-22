@@ -234,7 +234,7 @@ int next_thread(){
 
     do{
         i--;
-        if(i == 0)
+        if(i == -1)
             i = thread_lib_size - 1;
         //if(i == array_size)
             //i = 0;
