@@ -54,14 +54,16 @@ extern void threadInit(){
         thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
 
-    }
-    for(int i = 0; i < NUM_LOCKS; ++i){
-        lock[i].isLocked = false;
-        lock[i].thread_id = -1;
-        for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
-            condition[i][k] = false;
+        if(i < NUM_LOCKS){
+            lock[i].isLocked = false;
+            lock[i].thread_id = -1;
+            for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
+                condition[i][k] = false;
+            }
         }
     }
+
+    
     //activated the main thread and increase the size
     thread_lib[main_thread].active = true;
     thread_lib_size++;
