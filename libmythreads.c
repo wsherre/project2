@@ -23,7 +23,12 @@ library thread_lib[array_size];
 //array of void*. this is for threadJoin to find the results of exited threads
 void* exited_lib[array_size];
 
-bool lock[NUM_LOCKS];
+typedef struct lock_info{
+    bool isLocked;
+    int thread_id;
+}lock_info;
+
+lock_info lock[NUM_LOCKS];
 
 bool condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
 
@@ -51,7 +56,8 @@ extern void threadInit(){
 
     }
     for(int i = 0; i < NUM_LOCKS; ++i){
-        lock[i] = false;
+        lock[i].isLocked = false;
+        lock[i].thread_id = -1;
         for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
             condition[i][k] = false;
         }
@@ -189,28 +195,33 @@ extern void threadExit(void *result){
 //should lock this thread
 extern void threadLock(int lockNum){
     interruptDisable();
-    if(!lock[lockNum]){
-        lock[lockNum] = true;
+    if(!lock[lockNum].isLocked){
+        lock[lockNum].isLocked = true;
+        lock[lockNum].thread_id = current_running_tid;
         interruptEnable();
     }else{
-        while(lock[lockNum]){
-           interruptEnable();
+        interruptEnable();
+        while(lock[lockNum].isLocked){
             threadYield();
         }
         interruptDisable();
-        lock[lockNum] = true;
+        lock[lockNum].isLocked = true;
+        lock[lockNum].thread_id = current_running_tid;
         interruptEnable();
     }
 }
 //should unlock
 extern void threadUnlock(int lockNum){
     interruptDisable();
-    lock[lockNum] = false;
+    if(lock[lockNum].thread_id == current_running_tid){
+        lock[lockNum].isLocked = false;
+        lock[lockNum].thread_id = -1;
+    }
     interruptEnable();
 }
 //if it works it will do what it the write up tells it to do
 extern void threadWait(int lockNum, int conditionNum){
-    if(!lock[lockNum]){
+    if(!lock[lockNum].isLocked){
         printf("Error thread: %d called threadWait without having the lock", current_running_tid);
         exit(1);
     }else{
