@@ -36,5 +36,6 @@ int main(){
   threadJoin(id1, (void *)&result1);
   printf("thread1: %d\n", num);
   threadJoin(id2, (void *)&result1);
+  threadYield();
   printf("thread2: %d\n", num);
 }
