@@ -141,15 +141,15 @@ extern void threadYield(){
 extern void threadJoin(int thread_id, void **result){
     
     //if the thread is active we gotta finish it
-    if(thread_lib[thread_id].active == true){
+    while(thread_lib[thread_id].active == true){
 
         //i dont wanna stop - ozzy ozbourne
-        interruptDisable();
+        //interruptDisable();
         //int current = current_running_tid;
         //current_running_tid = thread_id;
 
         // if not wanna stop. i wanna stop - not ozzy osbourne
-        interruptEnable();
+        //interruptEnable();
 
         //swap into thread and now it should run to completion or exit
         threadYield();
