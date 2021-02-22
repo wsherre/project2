@@ -151,17 +151,8 @@ extern void threadJoin(int thread_id, void **result){
     //if the thread is active we gotta finish it
     while(thread_lib[thread_id].active == true){
 
-        //i dont wanna stop - ozzy ozbourne
-        //interruptDisable();
-        //int current = current_running_tid;
-        //current_running_tid = thread_id;
-
-        // if not wanna stop. i wanna stop - not ozzy osbourne
-        //interruptEnable();
-
-        //swap into thread and now it should run to completion or exit
+        //keep swapping threads until the thread has finished and isn't active anymore
         threadYield();
-        //swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
     }
 
     //if the thread has exited then this value will be true. 
