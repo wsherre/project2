@@ -182,6 +182,7 @@ extern void threadExit(void *result){
     
     //i actually have no idea what i should do when a thread exits so for now
     // im just going back to the main thread
+    current_running_tid = main_thread;
     setcontext(&(thread_lib[main_thread].thread_context));
 }
 
