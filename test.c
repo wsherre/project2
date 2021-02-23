@@ -37,7 +37,7 @@ int main(){
   threadInit();
 
   for (int i = 0; i < 6000; ++i){
-      array[i] = threadCreate(t2, i);
+      array[i] = threadCreate(t2, (void*)&i);
   }
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
