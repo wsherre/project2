@@ -176,13 +176,13 @@ extern void threadExit(void *result){
     //unactivate and set isExited to true for reasons mentioned in threadJoin
     thread_lib[current_running_tid].active = false;
     thread_lib[current_running_tid].isExited = true;
+    current_running_tid = main_thread;
     
     //i wanna stop - not ozzy osbourne
     if( interruptsAreDisabled) interruptEnable();
     
     //i actually have no idea what i should do when a thread exits so for now
     // im just going back to the main thread
-    current_running_tid = main_thread;
     setcontext(&(thread_lib[main_thread].thread_context));
 }
 
