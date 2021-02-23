@@ -15,12 +15,18 @@ void *t1(void* arg){
     threadUnlock(0);
     return NULL;
 }
+void *t2(void* arg){
+  printf("sup : %d\n", *((int *)arg));
+  return NULL;
+}
 int main(){
 
 
     int id1, id2;
   int p1;
   int p2;
+
+  int array[5001];
 
   p1 = 0;
   p2 = 0;
@@ -30,12 +36,14 @@ int main(){
   // initialize the threading library. DON'T call this more than once!!!
   threadInit();
 
-  
-  id1 = threadCreate(t, NULL);
+  for (int i = 0; i < 6000; ++i){
+      array[i] = threadCreate(t2, i);
+  }
+  /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
   threadJoin(id1, (void *)&result1);
   printf("thread1: %d\n", num);
   threadJoin(id2, (void *)&result1);
   threadYield();
-  printf("thread2: %d\n", num);
+  printf("thread2: %d\n", num);*/
 }
