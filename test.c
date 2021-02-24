@@ -41,6 +41,7 @@ int main(){
   }
 
   for(int i = 1; i <= 1025; ++i){
+    looping:
     threadJoin(array[i], (void *)&result1);
     printf("%d\n", i);
   }
