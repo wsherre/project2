@@ -7,7 +7,7 @@
 
 //i randomly picked a number between 4999 and 5001 exclusive and got this random number
 #define array_size 5000
-int new_array_size = 0;
+int new_array_size = array_size;
 
 //struct that will hold contents of my library
 //thread_context: context of the thread
@@ -52,7 +52,7 @@ static void interruptEnable ();
 extern void threadInit(){
     //initialize some stuff
     thread_lib = malloc(5000 *sizeof(library));
-    thread_lib = realloc(thread_lib, 2 * sizeof(thread_lib));
+    thread_lib = realloc(thread_lib, 10000 * sizeof(thread_lib));
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
