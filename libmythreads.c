@@ -6,8 +6,7 @@
 #include <assert.h>
 
 //i randomly picked a number between 4999 and 5001 exclusive and got this random number
-#define array_size 5000
-int new_array_size = array_size;
+int array_size = 2;
 
 //struct that will hold contents of my library
 //thread_context: context of the thread
@@ -23,7 +22,7 @@ typedef struct library{
 //the threads unique id will be the index of the array, main's id will be 0
 library *thread_lib;
 //array of void*. this is for threadJoin to find the results of exited threads
-void* exited_lib[array_size];
+void** exited_lib;
 
 typedef struct lock_info{
     bool isLocked;
@@ -36,7 +35,8 @@ bool condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
 
 //making globals
 int thread_lib_size = 0;
-int main_thread = 0;
+const int main_thread = 0;
+int active_threads = 0;
 //keeps track of which thread is running
 int current_running_tid = 0;
 int interruptsAreDisabled;
@@ -51,8 +51,8 @@ static void interruptEnable ();
 //also allow interrupts
 extern void threadInit(){
     //initialize some stuff
-    thread_lib = malloc(5000 *sizeof(library));
-    thread_lib = realloc(thread_lib, 10000 * sizeof(library));
+    thread_lib = malloc(array_size * sizeof(library));
+    exited_lib = malloc(array_size * sizeof(void *));
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
@@ -71,6 +71,7 @@ extern void threadInit(){
     //activated the main thread and increase the size
     thread_lib[main_thread].active = true;
     thread_lib_size++;
+    active_threads++;
 
     //save the main threads context
     getcontext(&(thread_lib[main_thread].thread_context));
@@ -80,11 +81,27 @@ extern void threadInit(){
     interruptsAreDisabled = 0;
 }
 
+void library_resize(){
+    array_size *= 2;
+    thread_lib = realloc(thread_lib, array_size * sizeof(library));
+    exited_lib = realloc(exited_lib, array_size * sizeof(void *));
+}
+
+void library_free(){
+    library main = thread_lib[0];
+    array_size = 2;
+    free(thread_lib);
+    thread_lib = malloc(array_size * sizeof(library));
+    thread_lib[0] = main;
+}
+
 //create a thread yayyy
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
     //disable interrupts so this is a smooth process
     if(!interruptsAreDisabled) interruptDisable();
+
+    if(thread_lib_size == array_size) library_resize();
     ucontext_t newcontext;
 
     //i think this is redundant (cause we save in swap context) but so is my life so im gonna make sure we're both running
@@ -181,6 +198,8 @@ extern void threadExit(void *result){
     thread_lib[current_running_tid].active = false;
     thread_lib[current_running_tid].isExited = true;
     current_running_tid = main_thread;
+    active_threads--;
+    if(active_threads == 1) library_free();
 
     //i wanna stop - not ozzy osbourne
     if( interruptsAreDisabled) interruptEnable();
