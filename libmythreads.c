@@ -91,8 +91,9 @@ void library_free(){
     library main = thread_lib[0];
     array_size = 2;
     free(thread_lib);
+    free(exited_lib);
     thread_lib = malloc(array_size * sizeof(library));
-    exited_lib = realloc(exited_lib, array_size * sizeof(void *));
+    exited_lib = malloc(array_size * sizeof(void *));
     thread_lib[0] = main;
 }
 
