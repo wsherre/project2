@@ -36,8 +36,12 @@ int main(){
   // initialize the threading library. DON'T call this more than once!!!
   threadInit();
 
-  for (int i = 0; i < 6000; ++i){
+  for (int i = 0; i < 1024; ++i){
       array[i] = threadCreate(t2, (void*)&i);
+  }
+
+  for(int i = 0; i <= 1024; ++i){
+    threadJoin(array[i + 1], (void *)&result1);
   }
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
