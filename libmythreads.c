@@ -4,8 +4,10 @@
 #include <ucontext.h>
 #include <stdbool.h>
 #include <assert.h>
+
 //i randomly picked a number between 4999 and 5001 exclusive and got this random number
 #define array_size 5000
+int new_array_size = 0;
 
 //struct that will hold contents of my library
 //thread_context: context of the thread
@@ -19,7 +21,7 @@ typedef struct library{
 
 //make an array of structs to hold all the threads information
 //the threads unique id will be the index of the array, main's id will be 0
-library thread_lib[array_size];
+library *thread_lib;
 //array of void*. this is for threadJoin to find the results of exited threads
 void* exited_lib[array_size];
 
@@ -49,6 +51,7 @@ static void interruptEnable ();
 //also allow interrupts
 extern void threadInit(){
     //initialize some stuff
+    thread_lib = malloc(5000 *sizeof(library));
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
@@ -177,7 +180,7 @@ extern void threadExit(void *result){
     thread_lib[current_running_tid].active = false;
     thread_lib[current_running_tid].isExited = true;
     current_running_tid = main_thread;
-    
+
     //i wanna stop - not ozzy osbourne
     if( interruptsAreDisabled) interruptEnable();
     
