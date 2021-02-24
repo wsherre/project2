@@ -122,6 +122,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
     thread_lib_size++;
+    active_threads++;
     
 
     //make a context for this thread. call the wrapper function and pass this function in and its argument
