@@ -40,9 +40,8 @@ int main(){
       array[i] = threadCreate(t2, (void*)&i);
   }
 
-  for(int i = 1; i <= 1024; ++i){
-    looping:
-    threadJoin(array[i], (void *)&result1);
+  for(int i = 1; i < 1025; ++i){
+    threadJoin(i, (void *)&result1);
     printf("%d\n", i);
   }
   /*id1 = threadCreate(t, NULL);
