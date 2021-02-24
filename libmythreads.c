@@ -179,6 +179,7 @@ extern void threadJoin(int thread_id, void **result){
     //if the thread has exited then this value will be true. 
     //if false then the thread never existed. just like my work ethic in an engl class
     if(thread_lib[thread_id].isExited == true ) *result = exited_lib[thread_id];
+    if(active_threads == 1) library_free();
 }
 
 //exit a thread yayyy
@@ -199,7 +200,6 @@ extern void threadExit(void *result){
     thread_lib[current_running_tid].isExited = true;
     current_running_tid = main_thread;
     active_threads--;
-    if(active_threads == 1) library_free();
 
     //i wanna stop - not ozzy osbourne
     if( interruptsAreDisabled) interruptEnable();
