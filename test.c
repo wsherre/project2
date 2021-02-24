@@ -17,7 +17,9 @@ void *t1(void* arg){
 }
 void *t2(void* arg){
   printf("sup : %d\n", *((int *)arg));
-  return NULL;
+  int *result = malloc(sizeof(int));
+  *result = *((int *)arg);
+  return result;
 }
 int main(){
 
@@ -42,7 +44,7 @@ int main(){
 
   for(int i = 1; i < 5001; ++i){
     threadJoin(i, (void *)&result1);
-    printf("%d\n", i);
+    printf("%d\n", *result1);
   }
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
