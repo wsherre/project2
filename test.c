@@ -29,7 +29,7 @@ int main(){
   int p1;
   int p2;
 
-  int array[200];
+  int array[201];
 
   p1 = 0;
   p2 = 0;
@@ -45,7 +45,7 @@ int main(){
       array[i] = threadCreate(t1, (void*)&i);
   }
 
-  for(int i = 0; i < 200; ++i){
+  for(int i = 1; i < 201; ++i){
     threadJoin(i, (void *)&result1);
     printf("%d\n", *result1);
   }
