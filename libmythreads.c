@@ -85,6 +85,11 @@ void library_resize(){
     array_size *= 2;
     thread_lib = realloc(thread_lib, array_size * sizeof(library));
     exited_lib = realloc(exited_lib, array_size * sizeof(void *));
+    for(int i = thread_lib_size; i < array_size; ++i){
+        thread_lib[i].active = false;
+        thread_lib[i].isExited = false;
+        exited_lib[i] = NULL;
+    }
 }
 
 void library_free(){
