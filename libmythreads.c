@@ -213,7 +213,7 @@ extern void threadExit(void *result){
     
     //i actually have no idea what i should do when a thread exits so for now
     // im just going back to the main thread
-    setcontext(&(thread_lib[main_thread].thread_context));
+    setcontext(thread_lib[main_thread].thread_context);
 }
 
 //should lock this thread
