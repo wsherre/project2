@@ -205,6 +205,7 @@ extern void threadJoin(int thread_id, void **result){
     //if false then the thread never existed. just like my work ethic in an engl class
     interruptDisable();
     if(thread_lib[thread_id].isExited == true ){ 
+        free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
         *result = exited_lib[thread_id];
         active_threads--;
     }
@@ -223,13 +224,8 @@ extern void threadExit(void *result){
     exited_lib[current_running_tid] = result;
 
     //nothing is ever free appparently. not even meaningless bytes of data
-    printf("free: %d\n", current_running_tid);
-    if(current_running_tid == 101){
-        for(int i = 0; i < thread_lib_size; ++i){
-            printf("active %d : %d\n", i, thread_lib[i].active);
-        }
-    }
-    if(current_running_tid != 101) free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
+    
+    
     
     //unactivate and set isExited to true for reasons mentioned in threadJoin
     thread_lib[current_running_tid].active = false;
