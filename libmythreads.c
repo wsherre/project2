@@ -128,7 +128,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
     thread_lib_size++;
-    printf("malloc: %d\n", thread_lib_size);
+    if(thread_lib_size == 74) printf("malloc: %d\n", thread_lib_size);
     active_threads++;
     
 
