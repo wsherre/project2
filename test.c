@@ -39,10 +39,10 @@ int main(){
   // initialize the threading library. DON'T call this more than once!!!
   threadInit();
 
-  for (int i = 0; i <= 100; ++i){
+  for (int i = 0; i < 100; ++i){
       array[i] = threadCreate(t, (void*)&i);
        printf("%d\n", i);
-  }for (int i = 101; i <= 200; ++i){
+  }for (int i = 100; i < 200; ++i){
       array[i] = threadCreate(t1, (void*)&i);
       printf("%d\n", i);
   }
