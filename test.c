@@ -1,20 +1,20 @@
 #include "mythreads.h"
 #include <stdio.h>
 #include <stdlib.h>
-int * num = 0;
+int num;
 void *t(void* arg){
     threadYield();
     threadLock(0);
-    *num += 1;
+    num += 1;
     threadYield();
     threadUnlock(0);
-    return num;
+    return &num;
 }
 void *t1(void* arg){
     threadLock(0);
-    *num -= 1;
+    num -= 1;
     threadUnlock(0);
-    return num;
+    return &num;
 }
 void *t2(void* arg){
   printf("sup : %d\n", *((int *)arg));
