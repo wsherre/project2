@@ -226,7 +226,7 @@ extern void threadExit(void *result){
     printf("free: %d\n", current_running_tid);
     if(current_running_tid == 101){
         for(int i = 0; i < thread_lib_size; ++i){
-            printf("active %d : %d", i, thread_lib[i].active);
+            printf("active %d : %d\n", i, thread_lib[i].active);
         }
     }
     free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
