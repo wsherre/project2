@@ -5,14 +5,14 @@ int * num = 0;
 void *t(void* arg){
     threadYield();
     threadLock(0);
-    *num++;
+    *num = *num + 1;
     threadYield();
     threadUnlock(0);
     return num;
 }
 void *t1(void* arg){
     threadLock(0);
-    num--;
+    *num -= 1;
     threadUnlock(0);
     return num;
 }
