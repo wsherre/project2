@@ -1,7 +1,7 @@
 
 
 #define STACK_SIZE (16*1024)  
-#define NUM_LOCKS 1
+#define NUM_LOCKS 10
 #define CONDITIONS_PER_LOCK 10 
 
 //the type of function used to run your threads
