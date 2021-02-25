@@ -98,6 +98,7 @@ void library_free(){
     thread_lib = malloc(array_size * sizeof(library));
     exited_lib = malloc(array_size * sizeof(void *));
     thread_lib[0] = main;
+    thread_lib_size = 1;
 }
 
 //create a thread yayyy
