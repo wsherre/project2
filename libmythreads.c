@@ -133,7 +133,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
     thread_lib_size++;
-    if(thread_lib_size == 74) printf("malloc: %d\n", thread_lib_size);
+    printf("malloc: %d\n", thread_lib_size);
     active_threads++;
     
 
@@ -223,7 +223,7 @@ extern void threadExit(void *result){
     exited_lib[current_running_tid] = result;
 
     //nothing is ever free appparently. not even meaningless bytes of data
-    if( current_running_tid == 74 )printf("free: %d\n", current_running_tid);
+    printf("free: %d\n", current_running_tid);
     free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
     
     //unactivate and set isExited to true for reasons mentioned in threadJoin
