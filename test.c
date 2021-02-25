@@ -48,9 +48,9 @@ int main(){
   }
 
   for(int i = 1; i < 201; ++i){
-    printf("%d\n", i);
+    printf("main join i %d\n", i);
     threadJoin(i, (void *)&result1);
-    printf("%d\n", *result1);
+    printf("main join result %d\n", *result1);
   }
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
