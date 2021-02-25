@@ -48,7 +48,7 @@ int main(){
   for(int i = 1; i < 201; ++i){
     threadJoin(i, (void *)&result1);
   }
-  printf("num %d", num);
+  printf("num %d\n", num);
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
   threadJoin(id1, (void *)&result1);
