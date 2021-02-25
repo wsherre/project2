@@ -202,7 +202,7 @@ extern void threadJoin(int thread_id, void **result){
     //if false then the thread never existed. just like my work ethic in an engl class
     interruptDisable();
     if(thread_lib[thread_id].isExited == true ){ 
-        free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
+        free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
         *result = exited_lib[thread_id];
         active_threads--;
     }
