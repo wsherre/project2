@@ -28,7 +28,7 @@ int main(){
   int p1;
   int p2;
 
-  int array[5001];
+  int array[10000];
 
   p1 = 0;
   p2 = 0;
