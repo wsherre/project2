@@ -192,7 +192,8 @@ extern void threadJoin(int thread_id, void **result){
 
         //allow us to be interrupted again and pray the next line runs before another interrupt
         interruptEnable();
-
+        
+        //swap to that thread so that it finishes faster
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
         
     }
