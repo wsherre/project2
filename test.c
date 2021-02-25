@@ -38,11 +38,11 @@ int main(){
   // initialize the threading library. DON'T call this more than once!!!
   threadInit();
 
-  for (int i = 0; i < 100000; ++i){
+  for (int i = 0; i < 10000; ++i){
       array[i] = threadCreate(t2, (void*)&i);
   }
 
-  for(int i = 1; i < 100001; ++i){
+  for(int i = 1; i < 10001; ++i){
     threadJoin(i, (void *)&result1);
     printf("%d\n", *result1);
   }
