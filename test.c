@@ -47,7 +47,7 @@ int main(){
       printf("%d\n", i);
   }
 
-  for(int i = 1; i < 201; ++i){
+  for(int i = 1; i <= 201; ++i){
     printf("main join i %d\n", i);
     threadJoin(i, (void *)&result1);
     printf("main join result %d\n", *result1);
