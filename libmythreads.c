@@ -186,7 +186,19 @@ extern void threadJoin(int thread_id, void **result){
     while(thread_lib[thread_id].active == true){
 
         //keep swapping threads until the thread has finished and isn't active anymore
-        threadYield();
+        //threadYield();
+        interruptDisable();
+        //save the current thread number
+        int current = current_running_tid;
+
+        //get the next thread in our array, if we're at the end then we go back to 0
+        current_running_tid = thread_id;
+
+        //allow us to be interrupted again and pray the next line runs before another interrupt
+        interruptEnable();
+
+        swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+        
     }
 
     //if the thread has exited then this value will be true. 
