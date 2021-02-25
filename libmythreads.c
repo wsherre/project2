@@ -229,7 +229,7 @@ extern void threadExit(void *result){
             printf("active %d : %d\n", i, thread_lib[i].active);
         }
     }
-    free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
+    if(current_running_tid != 101) free(thread_lib[current_running_tid].thread_context.uc_stack.ss_sp);
     
     //unactivate and set isExited to true for reasons mentioned in threadJoin
     thread_lib[current_running_tid].active = false;
