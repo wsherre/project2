@@ -201,10 +201,14 @@ extern void threadJoin(int thread_id, void **result){
     //if false then the thread never existed. just like my work ethic in an engl class
     interruptDisable();
     if(thread_lib[thread_id].isExited == true ){ 
+        //free the threads context cause we done with it
         free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
+        //save the results
         *result = exited_lib[thread_id];
         active_threads--;
     }
+    //if we have joined every thread except main then we don't need the lib anymore
+    //call lib free to re initialize it
     if(active_threads == 1) library_free();
     interruptEnable();
 }
@@ -218,10 +222,6 @@ extern void threadExit(void *result){
     if a thread normally returns it will still call thread exit so regardless of
     what happpens to a thread it will go through this function*/
     exited_lib[current_running_tid] = result;
-
-    //nothing is ever free appparently. not even meaningless bytes of data
-    
-    
     
     //unactivate and set isExited to true for reasons mentioned in threadJoin
     thread_lib[current_running_tid].active = false;
@@ -239,16 +239,19 @@ extern void threadExit(void *result){
 //should lock this thread
 extern void threadLock(int lockNum){
     interruptDisable();
+    //if not lock. lock it.
     if(!lock[lockNum].isLocked){
         lock[lockNum].isLocked = true;
         lock[lockNum].thread_id = current_running_tid;
         interruptEnable();
     }else{
         interruptEnable();
+        //while its locked yield until it gets unlocked
         while(lock[lockNum].isLocked){
             threadYield();
         }
         interruptDisable();
+        //grab it
         lock[lockNum].isLocked = true;
         lock[lockNum].thread_id = current_running_tid;
         interruptEnable();
@@ -257,6 +260,7 @@ extern void threadLock(int lockNum){
 //should unlock
 extern void threadUnlock(int lockNum){
     interruptDisable();
+    //if we hold the lock, unlock it
     if(lock[lockNum].thread_id == current_running_tid){
         lock[lockNum].isLocked = false;
         lock[lockNum].thread_id = -1;
@@ -265,11 +269,13 @@ extern void threadUnlock(int lockNum){
 }
 //if it works it will do what it the write up tells it to do
 extern void threadWait(int lockNum, int conditionNum){
+    //must have lock or else bad
     if(!lock[lockNum].isLocked){
         printf("Error thread: %d called threadWait without having the lock", current_running_tid);
         exit(1);
     }else{
         threadUnlock(lockNum);
+        //if that condition isnt true then wait until it is
         while(!condition[lockNum][conditionNum]){
             threadYield();
         }
