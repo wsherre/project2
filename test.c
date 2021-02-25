@@ -5,7 +5,7 @@ int num;
 void *t(void* arg){
     threadYield();
     threadLock(0);
-    num += 1;
+    num += 2;
     threadYield();
     threadUnlock(0);
     return &num;
