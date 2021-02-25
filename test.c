@@ -41,17 +41,14 @@ int main(){
 
   for (int i = 0; i < 100; ++i){
       array[i] = threadCreate(t, (void*)&i);
-       printf("%d\n", i);
   }for (int i = 100; i < 200; ++i){
       array[i] = threadCreate(t1, (void*)&i);
-      printf("%d\n", i);
   }
 
   for(int i = 1; i < 201; ++i){
-    printf("main join i %d\n", i);
     threadJoin(i, (void *)&result1);
-    printf("main join result %d\n", *result1);
   }
+  printf("num %d", num);
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
   threadJoin(id1, (void *)&result1);

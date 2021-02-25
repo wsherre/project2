@@ -129,7 +129,6 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     //activate
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
-    printf("malloc: %d\n", thread_lib_size);
     thread_lib_size++;
     active_threads++;
     
@@ -202,11 +201,6 @@ extern void threadJoin(int thread_id, void **result){
     //if false then the thread never existed. just like my work ethic in an engl class
     interruptDisable();
     if(thread_lib[thread_id].isExited == true ){ 
-        if(thread_id == 200){
-            for(int i = 0 ; i < thread_lib_size; ++i){
-                printf("active %d: %d\n", i, thread_lib[i].active);
-            }
-        }
         free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
         *result = exited_lib[thread_id];
         active_threads--;
