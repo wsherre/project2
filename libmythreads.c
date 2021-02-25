@@ -94,9 +94,6 @@ void library_resize(){
 
 void library_free(){
     library main = thread_lib[0];
-    for(int i = 0; i < array_size; ++i){
-        free(exited_lib[i]);
-    }
     array_size = 2;
     free(thread_lib);
     free(exited_lib);
