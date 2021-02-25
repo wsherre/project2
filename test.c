@@ -8,13 +8,13 @@ void *t(void* arg){
     num++;
     threadYield();
     threadUnlock(0);
-    return NULL;
+    return num;
 }
 void *t1(void* arg){
     threadLock(0);
     num--;
     threadUnlock(0);
-    return NULL;
+    return num;
 }
 void *t2(void* arg){
   printf("sup : %d\n", *((int *)arg));
