@@ -1,11 +1,11 @@
 #include "mythreads.h"
 #include <stdio.h>
 #include <stdlib.h>
-int num = 0;
+int * num = 0;
 void *t(void* arg){
     threadYield();
     threadLock(0);
-    num++;
+    *num++;
     threadYield();
     threadUnlock(0);
     return num;
