@@ -223,7 +223,7 @@ extern void threadJoin(int thread_id, void **result){
 extern void threadExit(void *result){
 
     if(current_running_tid == main_thread){
-        library_free();
+        lib_destroy();
         exit(0);
     }
 
