@@ -25,7 +25,7 @@ void *t2(void* arg){
 int main(){
 
 
-    int id1, id2;
+  int id1, id2;
   int p1;
   int p2;
 
@@ -41,10 +41,11 @@ int main(){
 
   for (int i = 0; i < 100; ++i){
       array[i] = threadCreate(t, (void*)&i);
-  }for (int i = 100; i < 200; ++i){
+  }
+  for (int i = 100; i < 200; ++i){
       array[i] = threadCreate(t1, (void*)&i);
   }
-  threadExit(result1);
+  //threadExit(result1);
 
   for(int i = 1; i < 201; ++i){
     threadJoin(i, (void *)&result1);
