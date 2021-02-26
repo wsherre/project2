@@ -15,7 +15,7 @@
 // everytime that the timer fires
 //...then I call yield.
 void timer_handler(int signum) {
-  if (!interruptsAreDisabled) {
+  if (!interruptsAreDisabled) { 
     // this printf is useful for illustration of what's happening,
     // but rather dangerous, since a printf interrupting a malloc
     // or other printf could cause a crash.
