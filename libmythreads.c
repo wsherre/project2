@@ -98,7 +98,7 @@ void lib_destroy(){
     //array_size = 1;
 
     if(active_threads > 1){
-        for(int i = 1; i < thread_lib_size; ++i){
+        for(int i = 0; i < thread_lib_size; ++i){
             if(thread_lib[i].active == true){
                 free(thread_lib[i].thread_context.uc_stack.ss_sp);
             }
