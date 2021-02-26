@@ -79,7 +79,7 @@ extern void threadInit(){
     current_running_tid = main_thread;
 
     //allow the program to be rude and interrupt us
-    interruptsAreDisabled = 0;
+    interruptsAreDisabled = 0; 
 }
 
 void library_resize(){
