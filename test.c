@@ -3,7 +3,6 @@
 #include <stdlib.h>
 int num;
 void *t(void* arg){
-    threadYield();
     threadLock(0);
     num += 2;
     threadYield();
@@ -13,6 +12,7 @@ void *t(void* arg){
 void *t1(void* arg){
     threadLock(0);
     num -= 1;
+    threadYield();
     threadUnlock(0);
     return &num;
 }
