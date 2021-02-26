@@ -115,7 +115,7 @@ void lib_destroy(){
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
     //disable interrupts so this is a smooth process
-    //interruptDisable();
+    interruptDisable();
 
     if(thread_lib_size == array_size) library_resize();
     ucontext_t newcontext;
@@ -143,7 +143,6 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     //make a context for this thread. call the wrapper function and pass this function in and its argument
     //details of the wrapper function are way below
     makecontext(&newcontext, ( void (*) ( void ))wrapper_function, 2, funcPtr, argPtr);
-    interruptDisable();
     
     //right now im not reusing thread ids so the running thread will be the end of the array
     current_running_tid = thread_lib_size - 1;
