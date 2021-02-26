@@ -105,10 +105,6 @@ void lib_destroy(){
         }
     }
     free(thread_lib);
-    for(int i = 0; i < thread_lib_size; ++i){
-        if(exited_lib[i] != NULL)
-            free(exited_lib[i]);
-    }
     free(exited_lib);
     //thread_lib = malloc(array_size * sizeof(library));
     //exited_lib = malloc(array_size * sizeof(void *));
