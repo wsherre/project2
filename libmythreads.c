@@ -97,6 +97,7 @@ void lib_destroy(){
     //library main = thread_lib[0];
     //array_size = 1;
 
+    printf("hey\n");
     for(int i = 0; i < thread_lib_size; ++i){
         if(thread_lib[i].active == true){
             free(thread_lib[i].thread_context.uc_stack.ss_sp);
