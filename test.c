@@ -7,7 +7,7 @@ void *t(void* arg){
     num += 2;
     threadYield();
     threadUnlock(0);
-    return &num;
+    threadExit(&num);
 }
 void *t1(void* arg){
     threadLock(0);
@@ -20,7 +20,7 @@ void *t2(void* arg){
   printf("sup : %d\n", *((int *)arg));
   int *result = malloc(sizeof(int));
   *result = *((int *)arg);
-  return result;
+  threadExit(&num);
 }
 int main(){
 
@@ -49,6 +49,7 @@ int main(){
 
   for(int i = 1; i < 201; ++i){
     threadJoin(i, (void *)&result1);
+
   }
   printf("num %d\n", num);
   /*id1 = threadCreate(t, NULL);
