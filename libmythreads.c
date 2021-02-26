@@ -5,8 +5,8 @@
 #include <stdbool.h>
 #include <assert.h>
 
-//i randomly picked a number between 4999 and 5001 exclusive and got this random number
-int array_size = 2;
+//i randomly picked a number between 0 exclusive and 1 inclusive and got this random number
+int array_size = 1;
 
 //struct that will hold contents of my library
 //thread_context: context of the thread
