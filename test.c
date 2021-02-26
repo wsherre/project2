@@ -8,6 +8,7 @@ void *t(void* arg){
     threadYield();
     threadUnlock(0);
     threadExit(&num);
+    return NULL;
 }
 void *t1(void* arg){
     threadLock(0);
@@ -21,6 +22,7 @@ void *t2(void* arg){
   int *result = malloc(sizeof(int));
   *result = *((int *)arg);
   threadExit(&num);
+  return NULL;
 }
 int main(){
 
