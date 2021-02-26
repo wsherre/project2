@@ -94,7 +94,7 @@ void library_resize(){
 
 void library_free(){
     library main = thread_lib[0];
-    array_size = 2;
+    array_size = 1;
     free(thread_lib);
     free(exited_lib);
     thread_lib = malloc(array_size * sizeof(library));
