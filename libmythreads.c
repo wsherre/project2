@@ -178,7 +178,11 @@ extern void threadYield(){
 
 //join a thread yayyy
 extern void threadJoin(int thread_id, void **result){
-    
+
+    if(thread_id < 1 || thread_id >= thread_lib_size)
+        return;
+    if(thread_lib[thread_id].isExited == true)
+        return;
     //if the thread is active we gotta finish it
     while(thread_lib[thread_id].active == true){
 
@@ -202,13 +206,13 @@ extern void threadJoin(int thread_id, void **result){
     //if the thread has exited then this value will be true. 
     //if false then the thread never existed. just like my work ethic in an engl class
     interruptDisable();
-    if(thread_lib[thread_id].isExited == true ){ 
         //free the threads context cause we done with it
-        free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
-        //save the results
+    free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
+    //save the results
+    if(exited_lib[thread_id] != NULL)
         *result = exited_lib[thread_id];
-        active_threads--;
-    }
+    thread_lib[thread_id].isExited = true;
+    active_threads--;
     //if we have joined every thread except main then we don't need the lib anymore
     //call lib free to re initialize it
     if(active_threads == 1) library_free();
@@ -224,20 +228,21 @@ extern void threadExit(void *result){
     }
 
     //i dont wann stop - ozzy osbourne
-    if( ! interruptsAreDisabled) interruptDisable();
+    interruptDisable();
 
     /*the value passed into this function will be set as the result of the thread
     if a thread normally returns it will still call thread exit so regardless of
     what happpens to a thread it will go through this function*/
-    exited_lib[current_running_tid] = result;
+    if(result != NULL)
+        exited_lib[current_running_tid] = result;
     
     //unactivate and set isExited to true for reasons mentioned in threadJoin
     thread_lib[current_running_tid].active = false;
-    thread_lib[current_running_tid].isExited = true;
+    //thread_lib[current_running_tid].isExited = true;
     current_running_tid = main_thread;
 
     //i wanna stop - not ozzy osbourne
-    if( interruptsAreDisabled) interruptEnable();
+    interruptEnable();
     
     //i actually have no idea what i should do when a thread exits so for now
     // im just going back to the main thread
@@ -318,7 +323,14 @@ so that the func when finished will have a path to keep going down after its don
 then it will call thread exit which take care of carefully and completely disembowling everything 
 that thread used to be and throwing it away*/
 void wrapper_function(thFuncPtr func, void* parameter){
-    threadExit(func(parameter));
+    void * result = func(parameter);
+    if(result != NULL){
+        exited_lib[current_running_tid] = result;
+    }
+    thread_lib[current_running_tid].active = false;
+    //thread_lib[current_running_tid].isExited = true;
+
+    setcontext(&(thread_lib[main_thread].thread_context));
 }
 
 //i dont wanna stop - ozzy osbourne
