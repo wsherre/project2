@@ -97,13 +97,12 @@ void lib_destroy(){
     //library main = thread_lib[0];
     //array_size = 1;
 
-    if(active_threads > 1){
-        for(int i = 0; i < thread_lib_size; ++i){
-            if(thread_lib[i].active == true){
-                free(thread_lib[i].thread_context.uc_stack.ss_sp);
-            }
+    for(int i = 0; i < thread_lib_size; ++i){
+        if(thread_lib[i].active == true){
+            free(thread_lib[i].thread_context.uc_stack.ss_sp);
         }
     }
+
     free(thread_lib);
     free(exited_lib);
     //thread_lib = malloc(array_size * sizeof(library));
