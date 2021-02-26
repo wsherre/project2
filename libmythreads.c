@@ -93,22 +93,18 @@ void library_resize(){
     }
 }
 
-void library_free(){
-    library main = thread_lib[0];
+void lib_destroy(){
+    //library main = thread_lib[0];
     array_size = 1;
-    for(int i = 0; i < array_size; ++i){
+    //for(int i = 0; i < array_size; ++i){
 
-    }
+    //}
     free(thread_lib);
     free(exited_lib);
-    thread_lib = malloc(array_size * sizeof(library));
-    exited_lib = malloc(array_size * sizeof(void *));
-    thread_lib[0] = main;
+    //thread_lib = malloc(array_size * sizeof(library));
+    //exited_lib = malloc(array_size * sizeof(void *));
+    //thread_lib[0] = main;
     thread_lib_size = 1;
-}
-
-void lib_destroy(){
-printf("heyyyyyyyyyyyyyy\n\n\n\n\n\n");
 }
 
 //create a thread yayyy
@@ -137,9 +133,7 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     //activate
     thread_lib[thread_lib_size].thread_context = newcontext;
     thread_lib[thread_lib_size].active = true;
-    thread_lib_size++;
-    active_threads++;
-    
+    thread_lib_size++; 
 
     //make a context for this thread. call the wrapper function and pass this function in and its argument
     //details of the wrapper function are way below
@@ -220,10 +214,8 @@ extern void threadJoin(int thread_id, void **result){
     if(exited_lib[thread_id] != NULL)
         *result = exited_lib[thread_id];
     thread_lib[thread_id].isExited = true;
-    active_threads--;
     //if we have joined every thread except main then we don't need the lib anymore
     //call lib free to re initialize it
-    if(active_threads == 1) library_free();
     interruptEnable();
 }
 
