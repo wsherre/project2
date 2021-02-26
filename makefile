@@ -7,11 +7,11 @@ libmythreads.o:
 	clang -Wall -c -g libmythreads.c
 libmythreads.a: libmythreads.o
 	ar -crvs libmythreads.a libmythreads.o
-t:
+t: libmythreads.a
 	clang -g -o t test.c libmythreads.a
-c:
+c: libmythreads.a
 	clang -g -o c cooperative_test.c libmythreads.a
-p:
+p: libmythreads.a
 	clang -g -o  preemptive_test.c libmythreads.a
 
 clean:
