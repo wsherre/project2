@@ -4,6 +4,7 @@
 #include <ucontext.h>
 #include <stdbool.h>
 #include <assert.h>
+void __attribute__((destructor)) lib_destroy();
 
 //i randomly picked a number between 0 exclusive and 1 inclusive and got this random number
 int array_size = 1;
@@ -95,12 +96,19 @@ void library_resize(){
 void library_free(){
     library main = thread_lib[0];
     array_size = 1;
+    for(int i = 0; i < array_size; ++i){
+
+    }
     free(thread_lib);
     free(exited_lib);
     thread_lib = malloc(array_size * sizeof(library));
     exited_lib = malloc(array_size * sizeof(void *));
     thread_lib[0] = main;
     thread_lib_size = 1;
+}
+
+void lib_destroy(){
+printf("heyyyyyyyyyyyyyy\n\n\n\n\n\n");
 }
 
 //create a thread yayyy
