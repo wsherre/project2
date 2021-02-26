@@ -192,7 +192,7 @@ extern void threadJoin(int thread_id, void **result){
 
         //allow us to be interrupted again and pray the next line runs before another interrupt
         interruptEnable();
-        
+
         //swap to that thread so that it finishes faster
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
         
@@ -216,6 +216,11 @@ extern void threadJoin(int thread_id, void **result){
 
 //exit a thread yayyy
 extern void threadExit(void *result){
+
+    if(current_running_tid == main_thread){
+        exit(0);
+    }
+
     //i dont wann stop - ozzy osbourne
     if( ! interruptsAreDisabled) interruptDisable();
 

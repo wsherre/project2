@@ -44,6 +44,7 @@ int main(){
   }for (int i = 100; i < 200; ++i){
       array[i] = threadCreate(t1, (void*)&i);
   }
+  threadExit(result1);
 
   for(int i = 1; i < 201; ++i){
     threadJoin(i, (void *)&result1);
