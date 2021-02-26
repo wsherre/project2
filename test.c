@@ -52,7 +52,7 @@ int main(){
 
   }
   printf("num %d\n", num);
-  threadExit(*result2);
+  threadExit((void*)&result2);
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
   threadJoin(id1, (void *)&result1);
