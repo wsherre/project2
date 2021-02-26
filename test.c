@@ -19,9 +19,9 @@ void *t1(void* arg){
 }
 void *t2(void* arg){
   printf("sup : %d\n", *((int *)arg));
-  int *result = malloc(sizeof(int));
-  *result = *((int *)arg);
-  threadExit(&num);
+  //int *result = malloc(sizeof(int));
+  //*result = *((int *)arg);
+  //threadExit(&num);
   return NULL;
 }
 int main(){
@@ -42,7 +42,7 @@ int main(){
   threadInit();
 
   for (int i = 0; i < 100000; ++i){
-      array[i] = threadCreate(t, (void*)&i);
+      array[i] = threadCreate(t2, (void*)&i);
   }
   //threadExit(result1);
 
