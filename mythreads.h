@@ -2,7 +2,7 @@
 
 #define STACK_SIZE (16*1024)  
 #define NUM_LOCKS 10
-#define CONDITIONS_PER_LOCK 10 
+#define CONDITIONS_PER_LOCK 100
 
 //the type of function used to run your threads
 typedef void *(*thFuncPtr) (void *); 
