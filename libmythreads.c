@@ -170,7 +170,7 @@ extern void threadYield(){
         //allow us to be interrupted again and pray the next line runs before another interrupt
         interruptEnable();
 
-        swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+        if(current != current_running_tid) swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
         //commenting under this line so a timer doesn't interrupt in the middle of a comment and swapcontext doesn't get called
     }
 }
