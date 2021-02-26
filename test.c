@@ -31,7 +31,7 @@ int main(){
   int p1;
   int p2;
 
-  int array[201];
+  int array[100000];
 
   p1 = 0;
   p2 = 0;
@@ -41,20 +41,16 @@ int main(){
   // initialize the threading library. DON'T call this more than once!!!
   threadInit();
 
-  for (int i = 0; i < 100; ++i){
+  for (int i = 0; i < 100000; ++i){
       array[i] = threadCreate(t, (void*)&i);
-  }
-  for (int i = 100; i < 200; ++i){
-      array[i] = threadCreate(t1, (void*)&i);
   }
   //threadExit(result1);
 
-  for(int i = 1; i < 201; ++i){
+  for(int i = 1; i < 100001; ++i){
     threadJoin(i, (void *)&result1);
     //printf("%d\n", *result1);
 
   }
-  threadJoin(100, (void*)&result1);
   printf("num %d\n", num);
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
