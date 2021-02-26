@@ -15,7 +15,7 @@ void *t1(void* arg){
     num -= 1;
     threadYield();
     threadUnlock(0);
-    return &num;
+    return NULL;
 }
 void *t2(void* arg){
   printf("sup : %d\n", *((int *)arg));
@@ -51,6 +51,7 @@ int main(){
 
   for(int i = 1; i < 201; ++i){
     threadJoin(i, (void *)&result1);
+    printf("%d\n", *result1);
 
   }
   printf("num %d\n", num);
