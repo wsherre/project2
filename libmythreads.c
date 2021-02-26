@@ -107,7 +107,7 @@ void library_free(){
 extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     
     //disable interrupts so this is a smooth process
-    if(!interruptsAreDisabled) interruptDisable();
+    interruptDisable();
 
     if(thread_lib_size == array_size) library_resize();
     ucontext_t newcontext;
