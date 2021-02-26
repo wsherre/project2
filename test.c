@@ -54,6 +54,7 @@ int main(){
     printf("%d\n", *result1);
 
   }
+  threadJoin(100, (void*)&result1);
   printf("num %d\n", num);
   /*id1 = threadCreate(t, NULL);
   id2 = threadCreate(t1, NULL);
