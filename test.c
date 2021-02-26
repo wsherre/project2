@@ -34,7 +34,7 @@ int main(){
   int array[100000];
 
   p1 = 0;
-  p2 = 0;
+  p2 = 0; 
 
   int *result1, *result2;
 
