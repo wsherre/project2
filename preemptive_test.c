@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 #define BIG 1000
-#define TIMER_INTERVAL_US 100
+#define TIMER_INTERVAL_US 50
 
 // this function will be called
 // everytime that the timer fires
