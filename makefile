@@ -12,7 +12,7 @@ t: libmythreads.a
 c: libmythreads.a
 	clang -g -o c cooperative_test.c libmythreads.a
 p: libmythreads.a
-	clang -g -o  preemptive_test.c libmythreads.a
+	clang -g -o p preemptive_test.c libmythreads.a
 
 clean:
 	rm -rf *.o *.dSYM *.a
