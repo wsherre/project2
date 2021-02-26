@@ -195,6 +195,8 @@ extern void threadJoin(int thread_id, void **result){
         return;
     if(thread_lib[thread_id].isExited == true)
         return;
+    int temp = current_running_tid;
+    int current;
     //if the thread is active we gotta finish it
     while(thread_lib[thread_id].active == true){
 
@@ -202,8 +204,7 @@ extern void threadJoin(int thread_id, void **result){
         //threadYield();
         interruptDisable();
         //save the current thread number
-        int current = current_running_tid;
-
+        current = current_running_tid;
         //get the next thread in our array, if we're at the end then we go back to 0
         current_running_tid = thread_id;
 
@@ -214,10 +215,10 @@ extern void threadJoin(int thread_id, void **result){
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
         
     }
-
+    interruptDisable();
+    current_running_tid = temp;
     //if the thread has exited then this value will be true. 
     //if false then the thread never existed. just like my work ethic in an engl class
-    interruptDisable();
         //free the threads context cause we done with it
     free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
     //save the results
