@@ -1,7 +1,7 @@
 CC=clang
 CFLAGS=-Wall -g
 
-all: libmythreads.a
+all: libmythreads.a t c p
 
 libmythreads.o:
 	clang -Wall -c -g libmythreads.c
