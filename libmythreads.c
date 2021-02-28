@@ -7,7 +7,7 @@
 void __attribute__((destructor)) lib_destroy();
 
 //i randomly picked a number between 0 exclusive and 1 inclusive and got this random number
-int array_size = 2;
+int array_size = 1;
 
 //struct that will hold contents of my library
 //thread_context: context of the thread
@@ -89,17 +89,11 @@ extern void threadInit(){
 }
 
 void library_resize(){
-    array_size *= 2;
+    array_size *= 2002;
     thread_lib = realloc(thread_lib, array_size * sizeof(library));
     exited_lib = realloc(exited_lib, array_size * sizeof(void *));
     for(int i = thread_lib_size; i < array_size; ++i){
-        ucontext_t new;
-    new.uc_stack.ss_sp = malloc ( STACK_SIZE ) ;
-    new.uc_stack.ss_size = STACK_SIZE ;
-    new.uc_stack.ss_flags = 0;
-    getcontext(&new);
-
-        thread_lib[i].thread_context = new;
+        
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
