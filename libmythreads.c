@@ -52,8 +52,8 @@ static void interruptEnable ();
 //also allow interrupts
 extern void threadInit(){
     //initialize some stuff
-    //thread_lib = malloc(array_size * sizeof(library));
-    //exited_lib = malloc(array_size * sizeof(void *));
+    thread_lib = malloc(array_size * sizeof(library));
+    exited_lib = malloc(array_size * sizeof(void *));
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
