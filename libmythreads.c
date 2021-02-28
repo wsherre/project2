@@ -7,7 +7,7 @@
 void __attribute__((destructor)) lib_destroy();
 
 //i randomly picked a number between 0 exclusive and 1 inclusive and got this random number
-int array_size = 2048;
+int array_size = 10000;
 
 //struct that will hold contents of my library
 //thread_context: context of the thread
