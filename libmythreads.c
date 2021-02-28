@@ -273,6 +273,8 @@ extern void threadLock(int lockNum){
             
             current_running_tid = lock[lockNum].thread_id;
 
+            interruptEnable();
+            
             swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
             
         }
