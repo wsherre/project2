@@ -7,7 +7,7 @@
 void __attribute__((destructor)) lib_destroy();
 
 //i randomly picked a number between 0 exclusive and 1 inclusive and got this random number
-int array_size = 1;
+int array_size = 2;
 
 //struct that will hold contents of my library
 //thread_context: context of the thread
@@ -83,7 +83,7 @@ extern void threadInit(){
 }
 
 void library_resize(){
-    array_size *= 10;
+    array_size *= 3;
     thread_lib = realloc(thread_lib, array_size * sizeof(library));
     exited_lib = realloc(exited_lib, array_size * sizeof(void *));
     for(int i = thread_lib_size; i < array_size; ++i){
