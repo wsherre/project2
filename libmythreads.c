@@ -74,8 +74,14 @@ extern void threadInit(){
     thread_lib_size++;
     active_threads++;
 
+    ucontext_t new;
+    new.uc_stack.ss_sp = malloc ( STACK_SIZE ) ;
+    new.uc_stack.ss_size = STACK_SIZE ;
+    new.uc_stack.ss_flags = 0;
+    get(&new);
+
     //save the main threads context
-    getcontext(&(thread_lib[main_thread].thread_context));
+    thread_lib[main_thread].thread_context = new;
     current_running_tid = main_thread;
 
     //allow the program to be rude and interrupt us
@@ -85,9 +91,9 @@ extern void threadInit(){
 void library_resize(){
     array_size *= 2;
     thread_lib = realloc(thread_lib, 1000 * sizeof(library));
-    if(thread_lib == NULL) printf("yop\n\n");
     exited_lib = realloc(exited_lib, array_size * sizeof(void *));
     for(int i = thread_lib_size; i < array_size; ++i){
+        //thread_lib[i].thread_context = NULL;
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
