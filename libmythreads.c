@@ -312,9 +312,9 @@ int next_thread(){
     int i = current_running_tid;
 
     do{
-        i--;
-        if(i == -1)
-            i = thread_lib_size - 1;
+        i++;
+        if(i == thread_lib_size)
+            i = 0;
         if(i == current_running_tid)
             break;
     }while(thread_lib[i].active == false);
