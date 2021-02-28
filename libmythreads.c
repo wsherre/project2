@@ -265,7 +265,18 @@ extern void threadLock(int lockNum){
         interruptEnable();
         //while its locked yield until it gets unlocked
         while(lock[lockNum].isLocked){
-            threadYield();
+            interruptDisable();
+            //save the current thread number
+            int current = current_running_tid;
+            //get the next thread in our array, if we're at the end then we go back to 0
+            current_running_tid = lock[lockNum].thread_id;
+
+            //allow us to be interrupted again and pray the next line runs before another interrupt
+            interruptEnable();
+
+            //swap to that thread so that it finishes faster
+            swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+        
         }
         interruptDisable();
         //grab it
