@@ -51,7 +51,7 @@ int main(){
 
   for(int i = 1; i < 2001; ++i){
     threadJoin(i, (void *)&result1);
-    //printf("%d\n", *result1);
+    printf("%d\n", *result1);
 
   }
   printf("num %d\n", num);
