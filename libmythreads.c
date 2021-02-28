@@ -83,8 +83,8 @@ extern void threadInit(){
 }
 
 void library_resize(){
-    array_size *= 3;
-    thread_lib = realloc(thread_lib, array_size * sizeof(library));
+    array_size *= 2;
+    thread_lib = realloc(thread_lib, (array_size + 1) * sizeof(library));
     exited_lib = realloc(exited_lib, array_size * sizeof(void *));
     for(int i = thread_lib_size; i < array_size; ++i){
         thread_lib[i].active = false;
