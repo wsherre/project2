@@ -243,6 +243,7 @@ extern void threadExit(void *result){
     //unactivate and set isExited to true for reasons mentioned in threadJoin
     thread_lib[current_running_tid].active = false;
     //thread_lib[current_running_tid].isExited = true;
+    int current = current_running_tid;
     current_running_tid = main_thread;
 
     //i wanna stop - not ozzy osbourne
@@ -250,7 +251,7 @@ extern void threadExit(void *result){
     
     //i actually have no idea what i should do when a thread exits so for now
     // im just going back to the main thread
-    setcontext(&(thread_lib[main_thread].thread_context));
+    swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
 }
 
 //should lock this thread
@@ -339,13 +340,17 @@ then it will call thread exit which take care of carefully and completely disemb
 that thread used to be and throwing it away*/
 void wrapper_function(thFuncPtr func, void* parameter){
     void * result = func(parameter);
+    interruptDisable();
     if(result != NULL){
         exited_lib[current_running_tid] = result;
     }
     thread_lib[current_running_tid].active = false;
+    int current = current_running_tid;
+    current_running_tid = main_thread;
     //thread_lib[current_running_tid].isExited = true;
+    interruptEnable();
 
-    setcontext(&(thread_lib[main_thread].thread_context));
+    swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
 }
 
 //i dont wanna stop - ozzy osbourne
