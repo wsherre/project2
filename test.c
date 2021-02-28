@@ -31,7 +31,7 @@ int main(){
   int p1;
   int p2;
 
-  int array[100000];
+  int array[3000];
 
   p1 = 0;
   p2 = 0; 
@@ -42,11 +42,14 @@ int main(){
   threadInit();
 
   for (int i = 0; i < 1000; ++i){
-      array[i] = threadCreate(t2, (void*)&i);
+      array[i] = threadCreate(t, (void*)&i);
+  }
+  for (int i = 0; i < 1000; ++i){
+      array[i] = threadCreate(t1, (void*)&i);
   }
   //threadExit(result1);
 
-  for(int i = 1; i < 1001; ++i){
+  for(int i = 1; i < 2001; ++i){
     threadJoin(i, (void *)&result1);
     //printf("%d\n", *result1);
 
