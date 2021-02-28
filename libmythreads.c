@@ -255,6 +255,7 @@ extern void threadExit(void *result){
 
 //should lock this thread
 extern void threadLock(int lockNum){
+    int current;
     interruptDisable();
     printf("in thread lock; %d\n", current_running_tid);
     //if not lock. lock it.
@@ -264,9 +265,16 @@ extern void threadLock(int lockNum){
         interruptEnable();
     }else{
         interruptEnable();
-        //while its locked yield until it gets unlocked
+        //while its locked switch into the context that currently holds the lock
         while(lock[lockNum].isLocked){
-            threadYield();
+            interruptDisable();
+
+            current = current_running_tid;
+            
+            current_running_tid = lock[lockNum].thread_id;
+
+            swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+            
         }
         interruptDisable();
         //grab it
