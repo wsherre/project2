@@ -96,11 +96,9 @@ void library_resize(){
 void lib_destroy(){
     //library main = thread_lib[0];
     //array_size = 1;
-    
-    for(int i = 0; i < thread_lib_size; ++i){
-        if(thread_lib[i].active == true){
+
+    for(int i = 1; i < thread_lib_size; ++i){
             free(thread_lib[i].thread_context.uc_stack.ss_sp);
-        }
     }
 
     free(thread_lib);
@@ -214,7 +212,7 @@ extern void threadJoin(int thread_id, void **result){
     //if the thread has exited then this value will be true. 
     //if false then the thread never existed. just like my work ethic in an engl class
         //free the threads context cause we done with it
-    free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
+    //free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
     //save the results
     if(exited_lib[thread_id] != NULL)
         *result = exited_lib[thread_id];
