@@ -41,15 +41,15 @@ int main(){
   // initialize the threading library. DON'T call this more than once!!!
   threadInit();
 
-  for (int i = 0; i < 100; ++i){
+  for (int i = 0; i < 1000; ++i){
       array[i] = threadCreate(t, (void*)&i);
   }
-  for (int i = 100; i < 200; ++i){
+  for (int i = 1000; i < 2000; ++i){
       array[i] = threadCreate(t1, (void*)&i);
   }
   //threadExit(result1);
 
-  for(int i = 1; i < 201; ++i){
+  for(int i = 1; i < 2001; ++i){
     threadJoin(i, (void *)&result1);
     printf("%d\n", *result1);
 
