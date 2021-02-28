@@ -21,7 +21,7 @@ typedef struct library{
 
 //make an array of structs to hold all the threads information
 //the threads unique id will be the index of the array, main's id will be 0
-library *thread_lib;
+library thread_lib[2002];
 //array of void*. this is for threadJoin to find the results of exited threads
 void** exited_lib;
 
@@ -52,8 +52,8 @@ static void interruptEnable ();
 //also allow interrupts
 extern void threadInit(){
     //initialize some stuff
-    thread_lib = malloc(array_size * sizeof(library));
-    exited_lib = malloc(array_size * sizeof(void *));
+    //thread_lib = malloc(array_size * sizeof(library));
+    //exited_lib = malloc(array_size * sizeof(void *));
     for(int i = 0; i < array_size; ++i){
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
@@ -84,8 +84,8 @@ extern void threadInit(){
 
 void library_resize(){
     array_size *= 2;
-    thread_lib = realloc(thread_lib, array_size * sizeof(library));
-    exited_lib = realloc(exited_lib, array_size * sizeof(void *));
+    //thread_lib = realloc(thread_lib, array_size * sizeof(library));
+    //exited_lib = realloc(exited_lib, array_size * sizeof(void *));
     for(int i = thread_lib_size; i < array_size; ++i){
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
