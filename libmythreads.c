@@ -78,7 +78,7 @@ extern void threadInit(){
     new.uc_stack.ss_sp = malloc ( STACK_SIZE ) ;
     new.uc_stack.ss_size = STACK_SIZE ;
     new.uc_stack.ss_flags = 0;
-    get(&new);
+    getcontext(&new);
 
     //save the main threads context
     thread_lib[main_thread].thread_context = new;
