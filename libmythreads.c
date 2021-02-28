@@ -6,7 +6,7 @@
 #include <assert.h>
 void __attribute__((destructor)) lib_destroy();
 
-//i randomly picked a number between 0 exclusive and 1 inclusive and got this random number
+//i randomly picked a number between 9999 exclusive and 10000 inclusive and got this random number
 int array_size = 10000;
 
 //struct that will hold contents of my library
