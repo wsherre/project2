@@ -93,7 +93,13 @@ void library_resize(){
     thread_lib = realloc(thread_lib, 1000 * sizeof(library));
     exited_lib = realloc(exited_lib, array_size * sizeof(void *));
     for(int i = thread_lib_size; i < array_size; ++i){
-        //thread_lib[i].thread_context = NULL;
+        ucontext_t new;
+    new.uc_stack.ss_sp = malloc ( STACK_SIZE ) ;
+    new.uc_stack.ss_size = STACK_SIZE ;
+    new.uc_stack.ss_flags = 0;
+    getcontext(&new);
+
+        thread_lib[i].thread_context = new;
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
@@ -104,7 +110,7 @@ void lib_destroy(){
     //library main = thread_lib[0];
     //array_size = 1;
 
-    for(int i = 1; i < array_size; ++i){
+    for(int i = 0; i < array_size; ++i){
             free(thread_lib[i].thread_context.uc_stack.ss_sp);
     }
 
