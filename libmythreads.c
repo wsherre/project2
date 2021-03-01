@@ -32,7 +32,13 @@ typedef struct lock_info{
 
 lock_info lock[NUM_LOCKS];
 
-bool condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
+typedef struct queue{
+    int thread_id;
+    bool is_signalled;
+    struct queue* next;
+}queue;
+
+queue *condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
 
 //making globals
 int thread_lib_size = 0;
@@ -67,7 +73,9 @@ extern void threadInit(){
         lock[i].isLocked = false;
         lock[i].thread_id = -1;
         for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
-            condition[i][k] = false;
+            condition[i][k]->thread_id = -1;
+            condition[i][k]->is_signalled = false;
+            condition[i][k]->next = NULL;
         }
     }
 
@@ -109,6 +117,11 @@ void lib_destroy(){
             free(thread_lib[i].thread_context.uc_stack.ss_sp);
     }
 
+    for(int i = 0; i < NUM_LOCKS; ++i){
+        for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
+            free(condition[i][k]);
+        }
+    }
 
     free(thread_lib);
     free(exited_lib);
@@ -306,6 +319,7 @@ extern void threadUnlock(int lockNum){
 }
 //if it works it will do what it the write up tells it to do
 extern void threadWait(int lockNum, int conditionNum){
+    interruptDisable();
     //must have lock or else bad
     if(!lock[lockNum].isLocked){
         printf("Error thread: %d called threadWait without having the lock", current_running_tid);
@@ -313,18 +327,29 @@ extern void threadWait(int lockNum, int conditionNum){
     }else{
         threadUnlock(lockNum);
         //if that condition isnt true then wait until it is
-        while(!condition[lockNum][conditionNum]){
+        enqueue(current_running_tid, lockNum, conditionNum);
+        
+        while(!condition_signalled(current_running_tid, lockNum, conditionNum)){
+            interruptEnable();
             threadYield();
+            interruptDisable();
         }
         interruptDisable();
         threadLock(lockNum);
-        condition[lockNum][conditionNum] = false;
+        dequeue(lockNum, conditionNum);
         interruptEnable();
     }
 }
 //sets the condition to true for that lock
 extern void threadSignal(int lockNum, int conditionNum){
-    condition[lockNum][conditionNum] = true;
+    queue* q = condition[lockNum][conditionNum];
+    while(q->next != NULL){
+        q = q->next;
+        if(q->is_signalled == false){
+            q->is_signalled = true;
+            break;
+        }
+    }
 }
 
 //this function just returns the index of the next active thread to run
@@ -373,4 +398,47 @@ static void interruptDisable () {
 static void interruptEnable () {
     assert ( interruptsAreDisabled ) ;
     interruptsAreDisabled = 0;
+}
+
+bool is_in_queue(int thread_id, int lock, int conditional){
+    queue *q = condition[lock][conditional];
+    while(q->next != NULL){
+        if(q->thread_id == current_running_tid)
+            return true;
+        q = q->next;
+    }
+    return false;
+}
+
+bool condition_signalled(int thread_id, int lock, int conditional){
+    queue *q = condition[lock][conditional];
+    while(q->next != NULL){
+        if(q->thread_id == current_running_tid)
+            return q->is_signalled;
+        q = q->next;
+    }
+    return false;
+}
+
+void enqueue(int thread_id, int lock, int conditional){
+    queue *q = condition[lock][conditional];
+    queue *new_node = malloc(sizeof(queue));
+    new_node->thread_id = thread_id;
+    new_node->is_signalled = false;
+    new_node->next = NULL;
+    while(q->next != NULL){
+        q = q->next;
+    }
+    q->next = new_node;
+}
+
+void dequeue(int lock, int conditional){
+    queue *q = condition[lock][conditional];
+    if(q->next == NULL){
+        printf("dequing an empty queue\n lock %d\ncondition %d\n", lock, conditional);
+        exit(0);
+    }
+    queue *next = q->next;
+    q->next = next->next;
+    free(next);
 }
