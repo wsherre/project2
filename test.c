@@ -50,7 +50,7 @@ int main(){
 
   for(int i = 1; i < 201; ++i){
     threadJoin(i, (void *)&result1);
-    printf("%d\n", *result1);
+    printf("%d %d\n", *result1, i);
 
   }
   printf("num %d\n", num);
