@@ -10,7 +10,7 @@ void *t(void* arg){
     return arg;
 }
 void *t1(void* arg){
-    threadLock(0);
+    threadLock(1);
     *((int *)arg) -= 1;
     threadYield();
     threadUnlock(1);
