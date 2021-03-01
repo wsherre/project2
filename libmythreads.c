@@ -30,9 +30,9 @@ typedef struct lock_info{
     int thread_id;
 }lock_info;
 
-lock_info lock[NUM_LOCKS];
+lock_info *lock;
 
-bool condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
+bool **condition;
 
 //making globals
 int thread_lib_size = 0;
@@ -61,11 +61,16 @@ extern void threadInit(){
         exited_lib[i] = NULL;
 
         if(i < NUM_LOCKS){
-            lock[i].isLocked = false;
-            lock[i].thread_id = -1;
-            for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
-                condition[i][k] = false;
-            }
+            
+        }
+    }
+    lock = malloc(NUM_LOCKS * sizeof(lock_info));
+    condition = malloc(NUM_LOCKS * CONDITIONS_PER_LOCK * sizeof(bool));
+    for(int i = 0; i < NUM_LOCKS; ++i){
+        lock[i].isLocked = false;
+        lock[i].thread_id = -1;
+        for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
+            condition[i][k] = false;
         }
     }
 
@@ -108,6 +113,9 @@ void lib_destroy(){
     for(int i = 0; i < array_size; ++i){
             free(thread_lib[i].thread_context.uc_stack.ss_sp);
     }
+
+    free(lock);
+    free(condition);
 
     free(thread_lib);
     free(exited_lib);
