@@ -4,7 +4,7 @@
 int num = 0;
 void *t(void* arg){
     threadLock(1);
-    *((int *)arg) += 1;
+    *((int *)arg) += 2;
     threadYield();
     threadUnlock(1);
     return arg;
