@@ -73,6 +73,7 @@ extern void threadInit(){
         lock[i].isLocked = false;
         lock[i].thread_id = -1;
         for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
+            printf("%d %d\n", i, k);
             condition[i][k] = false;
         }
     }
