@@ -65,7 +65,7 @@ extern void threadInit(){
         }
     }
     lock = (lock_info*)malloc(NUM_LOCKS * sizeof(lock_info));
-    condition = (bool**)malloc(NUM_LOCKS * sizeof(bool));
+    condition = (bool**)malloc(NUM_LOCKS * sizeof(bool * ));
     for(int i = 0; i < NUM_LOCKS; ++i){
         condition[i] = (bool*)malloc(CONDITIONS_PER_LOCK * sizeof(bool));
     }
