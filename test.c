@@ -4,18 +4,17 @@
 int num;
 void *t(void* arg){
     threadLock(0);
-    num += 2;
+    *((int *)arg) += 1;
     threadYield();
     threadUnlock(0);
-    threadExit(&num);
-    return NULL;
+    return arg;
 }
 void *t1(void* arg){
     threadLock(0);
-    num -= 1;
+    *((int *)arg) -= 1;
     threadYield();
     threadUnlock(0);
-    return NULL;
+    return arg;
 }
 void *t2(void* arg){
   printf("sup : %d\n", *((int *)arg));
@@ -41,16 +40,16 @@ int main(){
   // initialize the threading library. DON'T call this more than once!!!
   threadInit();
 
-  for (int i = 0; i < 1000; ++i){
+  for (int i = 0; i < 100; ++i){
       array[i] = threadCreate(t, (void*)&i);
   }
-  for (int i = 1000; i < 2000; ++i){
+  for (int i = 1000; i < 200; ++i){
       array[i] = threadCreate(t1, (void*)&i);
   }
   //threadExit(result1);
 
-  for(int i = 1; i < 2001; ++i){
-    printf("%d\n", i);
+  for(int i = 1; i < 201; ++i){
+    printf("\n%d\n", i);
     threadJoin(i, (void *)&result1);
     printf("%d\n", *result1);
 
