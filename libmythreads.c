@@ -30,9 +30,9 @@ typedef struct lock_info{
     int thread_id;
 }lock_info;
 
-lock_info *lock;
+lock_info lock[NUM_LOCKS];
 
-bool **condition;
+bool condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
 
 //making globals
 int thread_lib_size = 0;
@@ -60,11 +60,9 @@ extern void threadInit(){
         thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
 
-        if(i < NUM_LOCKS){
-            
-        }
+        
     }
-    lock = (lock_info*)malloc(NUM_LOCKS * sizeof(lock_info));
+    /*lock = (lock_info*)malloc(NUM_LOCKS * sizeof(lock_info));
     condition = (bool**)malloc(NUM_LOCKS * sizeof(bool * ));
     for(int i = 0; i < NUM_LOCKS; ++i){
         condition[i] = (bool*)malloc(CONDITIONS_PER_LOCK * sizeof(bool));
@@ -74,6 +72,13 @@ extern void threadInit(){
         lock[i].thread_id = -1;
         for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
             printf("%d %d\n", i, k);
+            condition[i][k] = false;
+        }
+    }*/
+    for(int i = 0; i < NUM_LOCKS; ++i){
+        lock[i].isLocked = false;
+        lock[i].thread_id = -1;
+        for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
             condition[i][k] = false;
         }
     }
