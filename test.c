@@ -43,7 +43,7 @@ int main(){
   for (int i = 0; i < 100; ++i){
       array[i] = threadCreate(t, (void*)&i);
   }
-  for (int i = 1000; i < 200; ++i){
+  for (int i = 100; i < 200; ++i){
       array[i] = threadCreate(t1, (void*)&i);
   }
   //threadExit(result1);
