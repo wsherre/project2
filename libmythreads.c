@@ -123,8 +123,8 @@ void lib_destroy(){
             free(thread_lib[i].thread_context.uc_stack.ss_sp);
     }
 
-    free(lock);
-    free(condition);
+    //free(lock);
+    //free(condition);
 
     free(thread_lib);
     free(exited_lib);
