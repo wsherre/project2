@@ -98,8 +98,6 @@ void library_resize(){
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
-
-        test++;
     }
 }
 
@@ -355,12 +353,13 @@ void wrapper_function(thFuncPtr func, void* parameter){
         exited_lib[current_running_tid] = result;
     }
     thread_lib[current_running_tid].active = false;
-    int current = current_running_tid;
-    current_running_tid = main_thread;
+    //int current = current_running_tid;
+    //current_running_tid = main_thread;
     //thread_lib[current_running_tid].isExited = true;
     interruptEnable();
 
-    swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+    //swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+    threadYield();
 }
 
 //i dont wanna stop - ozzy osbourne
