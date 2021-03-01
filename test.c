@@ -1,7 +1,7 @@
 #include "mythreads.h"
 #include <stdio.h>
 #include <stdlib.h>
-int num;
+int num = 0;
 void *t(void* arg){
     threadLock(0);
     *((int *)arg) += 1;
@@ -41,10 +41,10 @@ int main(){
   threadInit();
 
   for (int i = 0; i < 100; ++i){
-      array[i] = threadCreate(t, (void*)&i);
+      array[i] = threadCreate(t, (void*)&num);
   }
   for (int i = 100; i < 200; ++i){
-      array[i] = threadCreate(t1, (void*)&i);
+      array[i] = threadCreate(t1, (void*)&num);
   }
   //threadExit(result1);
 
