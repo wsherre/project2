@@ -65,7 +65,7 @@ extern void threadInit(){
         }
     }
     lock = (lock_info*)malloc(NUM_LOCKS * sizeof(lock_info));
-    condition = (bool*)malloc(NUM_LOCKS * CONDITIONS_PER_LOCK * sizeof(bool));
+    condition = (bool**)malloc(NUM_LOCKS * CONDITIONS_PER_LOCK * sizeof(bool));
     for(int i = 0; i < NUM_LOCKS; ++i){
         lock[i].isLocked = false;
         lock[i].thread_id = -1;
