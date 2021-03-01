@@ -153,11 +153,12 @@ extern int threadCreate(thFuncPtr funcPtr, void *argPtr){
     //save thread id so when we return the function can return the proper value
     int thread_id = current_running_tid;
 
-    //allow interrupts to happen again
-    interruptEnable();
 
     //if i messed up there's no going back now
     swapcontext( &(thread_lib[temp].thread_context), &newcontext);
+
+    //allow interrupts to happen again
+    interruptEnable();
     
     //the current running thread id could be up to like 5000 but luckily we saved it beforehand so we're good
     return thread_id;
@@ -177,11 +178,11 @@ extern void threadYield(){
         //get the next thread in our array, if we're at the end then we go back to 0
         current_running_tid = next_thread();
 
-        //allow us to be interrupted again and pray the next line runs before another interrupt
-        interruptEnable();
 
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
-        //commenting under this line so a timer doesn't interrupt in the middle of a comment and swapcontext doesn't get called
+        
+        //allow us to be interrupted again and pray the next line runs before another interrupt
+        interruptEnable();
     }
 }
 
@@ -205,11 +206,12 @@ extern void threadJoin(int thread_id, void **result){
         //get the next thread in our array, if we're at the end then we go back to 0
         current_running_tid = thread_id;
 
-        //allow us to be interrupted again and pray the next line runs before another interrupt
-        interruptEnable();
+        
 
         //swap to that thread so that it finishes faster
         swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+        //allow us to be interrupted again and pray the next line runs before another interrupt
+        interruptEnable();
         
     }
     interruptDisable();
@@ -251,12 +253,13 @@ extern void threadExit(void *result){
     int current = current_running_tid;
     current_running_tid = main_thread;
 
-    //i wanna stop - not ozzy osbourne
-    interruptEnable();
+    
     
     //i actually have no idea what i should do when a thread exits so for now
     // im just going back to the main thread
     swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+    //i wanna stop - not ozzy osbourne
+    interruptEnable();
 }
 
 //should lock this thread
@@ -344,6 +347,7 @@ so that the func when finished will have a path to keep going down after its don
 then it will call thread exit which take care of carefully and completely disembowling everything 
 that thread used to be and throwing it away*/
 void wrapper_function(thFuncPtr func, void* parameter){
+    interruptEnable();
     void * result = func(parameter);
     interruptDisable();
     if(result != NULL){
