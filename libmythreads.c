@@ -62,19 +62,7 @@ extern void threadInit(){
 
         
     }
-    /*lock = (lock_info*)malloc(NUM_LOCKS * sizeof(lock_info));
-    condition = (bool**)malloc(NUM_LOCKS * sizeof(bool * ));
-    for(int i = 0; i < NUM_LOCKS; ++i){
-        condition[i] = (bool*)malloc(CONDITIONS_PER_LOCK * sizeof(bool));
-    }
-    for(int i = 0; i < NUM_LOCKS; ++i){
-        lock[i].isLocked = false;
-        lock[i].thread_id = -1;
-        for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
-            printf("%d %d\n", i, k);
-            condition[i][k] = false;
-        }
-    }*/
+    
     for(int i = 0; i < NUM_LOCKS; ++i){
         lock[i].isLocked = false;
         lock[i].thread_id = -1;
@@ -116,22 +104,14 @@ void library_resize(){
 }
 
 void lib_destroy(){
-    //library main = thread_lib[0];
-    //array_size = 1;
 
     for(int i = 0; i < array_size; ++i){
             free(thread_lib[i].thread_context.uc_stack.ss_sp);
     }
 
-    //free(lock);
-    //free(condition);
 
     free(thread_lib);
     free(exited_lib);
-    //thread_lib = malloc(array_size * sizeof(library));
-    //exited_lib = malloc(array_size * sizeof(void *));
-    //thread_lib[0] = main;
-    //thread_lib_size = 1;
 }
 
 //create a thread yayyy
