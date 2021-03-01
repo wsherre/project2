@@ -49,7 +49,6 @@ int main(){
   //threadExit(result1);
 
   for(int i = 1; i < 201; ++i){
-    printf("\n%d\n", i);
     threadJoin(i, (void *)&result1);
     printf("%d\n", *result1);
 
