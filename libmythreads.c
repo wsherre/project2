@@ -38,6 +38,7 @@ bool condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
 int thread_lib_size = 0;
 const int main_thread = 0;
 int active_threads = 0;
+int test = 1;
 //keeps track of which thread is running
 int current_running_tid = 0;
 int interruptsAreDisabled;
@@ -97,6 +98,8 @@ void library_resize(){
         thread_lib[i].active = false;
         thread_lib[i].isExited = false;
         exited_lib[i] = NULL;
+
+        test++;
     }
 }
 
