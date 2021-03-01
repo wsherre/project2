@@ -52,6 +52,10 @@ int interruptsAreDisabled;
 //declaring helper functions
 int next_thread();
 void wrapper_function(thFuncPtr, void*);
+bool is_in_queue(int, int, int);
+bool condition_signalled(int, int, int);
+void enqueue(int, int, int);
+void dequeue(int, int);
 static void interruptDisable ();
 static void interruptEnable ();
 
