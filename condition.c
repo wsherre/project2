@@ -28,6 +28,8 @@ int main(){
 
   p1 = 0;
   p2 = 5; 
+  p3 = 10;
+  p4 = 15;
 
 
   int *result1, *result2;
