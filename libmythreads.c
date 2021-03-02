@@ -213,7 +213,7 @@ extern void threadJoin(int thread_id, void **result){
     if(thread_lib[thread_id].isExited == true)
         return;
     int temp = current_running_tid;
-    int current;
+    //int current;
     //if the thread is active we gotta finish it
     while(thread_lib[thread_id].active == true){
 

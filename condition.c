@@ -54,16 +54,16 @@ int main(){
   threadJoin(id4, (void *)&result1);
   printf("joined #4 --> %d.\n", *result1);
 
+  threadJoin(id1, (void *)&result1);
+  printf("joined #1 --> %d.\n", *result1);
+
   threadJoin(id2, (void *)&result1);
   printf("joined #2 --> %d.\n", *result1);
 
   threadJoin(id3, (void *)&result1);
   printf("joined #3 --> %d.\n", *result1);
 
-  threadJoin(id3, (void *)&result1);
-  printf("joined #3 --> %d.\n", *result1);
-
   threadJoin(id5, (void *)&result1);
-  printf("joined #4 --> %d.\n", *result1);
+  printf("joined #5 --> %d.\n", *result1);
   
 }
