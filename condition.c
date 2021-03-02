@@ -12,7 +12,6 @@ void *t(void* arg){
 void *t1(void*arg){
     threadYield();
     threadSignal(0, 5);
-    threadYield();
     threadSignal(0,5);
     return NULL;
 }
