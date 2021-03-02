@@ -17,7 +17,7 @@ p: libmythreads.a preemptive_test.c
 	clang -g -o p preemptive_test.c libmythreads.a
 
 con: libmythreads.a preemptive_test.c
-	clang -g -o p condition.c libmythreads.a
+	clang -g -o con condition.c libmythreads.a
 
 clean:
 	rm -rf *.o *.dSYM *.a
