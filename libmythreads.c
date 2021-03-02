@@ -219,18 +219,20 @@ extern void threadJoin(int thread_id, void **result){
 
         //keep swapping threads until the thread has finished and isn't active anymore
         //threadYield();
-        interruptDisable();
+        //interruptDisable();
         //save the current thread number
-        current = current_running_tid;
+        //current = current_running_tid;
         //get the next thread in our array, if we're at the end then we go back to 0
-        current_running_tid = thread_id;
+        //current_running_tid = thread_id;
 
         
 
         //swap to that thread so that it finishes faster
-        swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
+        //swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
         //allow us to be interrupted again and pray the next line runs before another interrupt
-        interruptEnable();
+
+        threadYield(); 
+        //interruptEnable();
         
     }
     interruptDisable();
