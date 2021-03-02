@@ -341,7 +341,6 @@ extern void threadWait(int lockNum, int conditionNum){
             threadYield();
             interruptDisable();
         }
-        interruptDisable();
         threadLock(lockNum);
         dequeue(lockNum, conditionNum);
         interruptEnable();
