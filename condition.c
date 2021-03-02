@@ -9,12 +9,21 @@ void *t(void* arg){
     threadUnlock(0);
     return arg;
 }
+void *t2(void* arg){
+    threadLock(5);
+    threadWait(5, 8);
+    *((int *)arg) += 2;
+    threadUnlock(5);
+    return arg;
+}
 void *t1(void*arg){
     threadYield();
     threadSignal(0, 5);
     threadSignal(0,5);
-    threadSignal(0, 5);
-    threadSignal(0, 5);
+    threadYield();
+    threadSignal(5, 8);
+    threadYield();
+    threadSignal(5, 8);
     return NULL;
 }
 
@@ -39,8 +48,8 @@ int main(){
 
   id1 = threadCreate(t, (void*)&p1);
   id2 = threadCreate(t, (void*)&p2);
-  id3 = threadCreate(t, (void*)&p3);
-  id4 = threadCreate(t, (void*)&p4);
+  id3 = threadCreate(t2, (void*)&p3);
+  id4 = threadCreate(t2, (void*)&p4);
   id5 = threadCreate(t1, (void*)&p1);
 
   threadJoin(id1, (void *)&result1);
