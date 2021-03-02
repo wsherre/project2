@@ -283,7 +283,7 @@ extern void threadExit(void *result){
 //should lock this thread
 extern void threadLock(int lockNum){
     int current;
-    interruptDisable();
+    if(!interruptsAreDisabled)interruptDisable();
     //printf("in thread lock; %d\n", current_running_tid);
     //if not lock. lock it.
     if(!lock[lockNum].isLocked){
@@ -314,7 +314,7 @@ extern void threadLock(int lockNum){
 }
 //should unlock
 extern void threadUnlock(int lockNum){
-    interruptDisable();
+    if(!interruptsAreDisabled)interruptDisable();
     //if we hold the lock, unlock it
     if(lock[lockNum].thread_id == current_running_tid){
         lock[lockNum].isLocked = false;
