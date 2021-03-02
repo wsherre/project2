@@ -56,6 +56,7 @@ bool is_in_queue(int, int, int);
 bool condition_signalled(int, int, int);
 void enqueue(int, int, int);
 void dequeue(int, int);
+bool first_in_queue(int, int );
 static void interruptDisable ();
 static void interruptEnable ();
 
@@ -341,6 +342,11 @@ extern void threadWait(int lockNum, int conditionNum){
             threadYield();
             interruptDisable();
         }
+        while(!first_in_queue(lockNum, conditionNum)){
+            interruptEnable();
+            threadYield();
+            interruptDisable();
+        }
         threadLock(lockNum);
         interruptDisable();
         dequeue(lockNum, conditionNum);
@@ -448,4 +454,9 @@ void dequeue(int lock, int conditional){
     queue *next = q->next;
     q->next = next->next;
     free(next);
+}
+
+bool first_in_queue(int lockNum, int conditional){
+    queue *q = condition[lockNum][conditional];
+    return q->next->thread_id == current_running_tid;
 }
