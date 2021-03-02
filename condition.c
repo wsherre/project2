@@ -51,14 +51,14 @@ int main(){
   id4 = threadCreate(t2, (void*)&p4);
   id5 = threadCreate(t1, (void*)&p1);
 
-  threadJoin(id1, (void *)&result1);
-  printf("joined #1 --> %d.\n", *result1);
+  threadJoin(id4, (void *)&result1);
+  printf("joined #4 --> %d.\n", *result1);
 
   threadJoin(id2, (void *)&result1);
   printf("joined #2 --> %d.\n", *result1);
 
-  threadJoin(id4, (void *)&result1);
-  printf("joined #4 --> %d.\n", *result1);
+  threadJoin(id3, (void *)&result1);
+  printf("joined #3 --> %d.\n", *result1);
 
   threadJoin(id3, (void *)&result1);
   printf("joined #3 --> %d.\n", *result1);
