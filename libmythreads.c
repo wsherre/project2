@@ -77,6 +77,7 @@ extern void threadInit(){
         lock[i].isLocked = false;
         lock[i].thread_id = -1;
         for(int k = 0; k < CONDITIONS_PER_LOCK; ++k){
+            condition[i][k] = malloc(sizeof(queue));
             condition[i][k]->thread_id = -1;
             condition[i][k]->is_signalled = false;
             condition[i][k]->next = NULL;
