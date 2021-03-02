@@ -6,7 +6,7 @@ void *t(void* arg){
     threadLock(0);
     threadWait(0, 5);
     *((int *)arg) += 2;
-    threadUnlock(1);
+    threadUnlock(0);
     return arg;
 }
 void *t1(void*arg){
