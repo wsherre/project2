@@ -330,7 +330,9 @@ extern void threadWait(int lockNum, int conditionNum){
         printf("Error thread: %d called threadWait without having the lock", current_running_tid);
         exit(1);
     }else{
+        interruptEnable();
         threadUnlock(lockNum);
+        interruptDisable();
         //if that condition isnt true then wait until it is
         enqueue(current_running_tid, lockNum, conditionNum);
         
