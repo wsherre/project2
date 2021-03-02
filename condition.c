@@ -23,7 +23,7 @@ void *t1(void*arg){
     threadYield();
     threadSignal(5, 8);
     threadYield();
-    threadSignal(5, 8);
+    threadSignal(5, 8);threadSignal(5, 9);
     return NULL;
 }
 
