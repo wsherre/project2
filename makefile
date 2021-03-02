@@ -16,7 +16,7 @@ c: libmythreads.a cooperative_test.c
 p: libmythreads.a preemptive_test.c
 	clang -g -o p preemptive_test.c libmythreads.a
 
-con: libmythreads.a preemptive_test.c
+con: libmythreads.a condition.c
 	clang -g -o con condition.c libmythreads.a
 
 clean:
