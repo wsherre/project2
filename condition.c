@@ -17,10 +17,10 @@ void *t2(void* arg){
     return arg;
 }
 void *t1(void*arg){
-    threadYield();
+    //threadYield();
     threadSignal(0, 5);
     threadSignal(0,5);
-    threadYield();
+    //threadYield();
     threadSignal(5, 8);
     threadYield();
     threadSignal(5, 8);threadSignal(5, 9);
@@ -58,13 +58,13 @@ int main(){
   threadJoin(id2, (void *)&result1);
   printf("joined #2 --> %d.\n", *result1);
 
-  threadJoin(id3, (void *)&result1);
-  printf("joined #3 --> %d.\n", *result1);
-
   threadJoin(id4, (void *)&result1);
   printf("joined #4 --> %d.\n", *result1);
 
   threadJoin(id3, (void *)&result1);
+  printf("joined #3 --> %d.\n", *result1);
+
+  threadJoin(id5, (void *)&result1);
   printf("joined #4 --> %d.\n", *result1);
   
 }
