@@ -409,7 +409,7 @@ static void interruptEnable () {
 
 bool is_in_queue(int thread_id, int lock, int conditional){
     queue *q = condition[lock][conditional];
-    while(q->next != NULL){
+    while(q != NULL){
         if(q->thread_id == current_running_tid)
             return true;
         q = q->next;
@@ -419,7 +419,7 @@ bool is_in_queue(int thread_id, int lock, int conditional){
 
 bool condition_signalled(int thread_id, int lock, int conditional){
     queue *q = condition[lock][conditional];
-    while(q->next != NULL){
+    while(q != NULL){
         if(q->thread_id == current_running_tid)
             return q->is_signalled;
         q = q->next;
