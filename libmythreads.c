@@ -294,7 +294,6 @@ extern void threadLock(int lockNum){
             swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
 
             interruptEnable();
-            threadYield();
             
         }
         interruptDisable();
