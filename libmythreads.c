@@ -398,13 +398,13 @@ void wrapper_function(thFuncPtr func, void* parameter){
 
 //i dont wanna stop - ozzy osbourne
 static void interruptDisable () {
-    assert (! interruptsAreDisabled ) ;
+    //assert (! interruptsAreDisabled ) ;
     interruptsAreDisabled = 1;
 }
 
 //i wanna stop - not ozzy osbourne
 static void interruptEnable () {
-    assert ( interruptsAreDisabled ) ;
+    //assert ( interruptsAreDisabled ) ;
     interruptsAreDisabled = 0;
 }
 
