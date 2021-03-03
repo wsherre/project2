@@ -285,7 +285,7 @@ extern void threadLock(int lockNum){
         interruptEnable();
         //while its locked switch into the context that currently holds the lock
         while(lock[lockNum].isLocked){
-            /*interruptDisable();
+            interruptDisable();
 
             current = current_running_tid;
             
@@ -293,7 +293,7 @@ extern void threadLock(int lockNum){
 
             swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
 
-            interruptEnable();*/
+            interruptEnable();
             threadYield();
             
         }
