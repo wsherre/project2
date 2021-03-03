@@ -6,7 +6,7 @@
 #include <assert.h>
 void __attribute__((destructor)) lib_destroy();
 
-//legit idk just wanted to start here
+//legit i dont know i  just wanted to start small and work my way up
 int array_size = 1;
 
 //struct that will hold contents of my library
@@ -25,19 +25,23 @@ library *thread_lib;
 //array of void*. this is for threadJoin to find the results of exited threads
 void** exited_lib;
 
+//struct to hold the info for every loc
 typedef struct lock_info{
     bool isLocked;
     int thread_id;
 }lock_info;
 
+//an array of locks
 lock_info lock[NUM_LOCKS];
 
+//linked list struct for the queue in condition variables
 typedef struct queue{
     int thread_id;
     bool is_signalled;
     struct queue* next;
 }queue;
 
+//array of queue pointers for the condition variables. basically an array of linked lists
 queue *condition[NUM_LOCKS][CONDITIONS_PER_LOCK];
 
 //making globals
@@ -73,7 +77,7 @@ extern void threadInit(){
 
         
     }
-    
+    //initialize locks and condition variables
     for(int i = 0; i < NUM_LOCKS; ++i){
         lock[i].isLocked = false;
         lock[i].thread_id = -1;
@@ -105,6 +109,7 @@ extern void threadInit(){
     interruptsAreDisabled = 0; 
 }
 
+//if our library fills up then double its size and initialize
 void library_resize(){
     array_size *= 2;
     thread_lib = realloc(thread_lib, array_size * sizeof(library));
@@ -117,6 +122,7 @@ void library_resize(){
     }
 }
 
+//destructor running at the end of the library. free all of the data
 void lib_destroy(){
 
     for(int i = 0; i < array_size; ++i){
@@ -217,31 +223,13 @@ extern void threadJoin(int thread_id, void **result){
     //if the thread is active we gotta finish it
     while(thread_lib[thread_id].active == true){
 
-        //keep swapping threads until the thread has finished and isn't active anymore
-        //threadYield();
-        //interruptDisable();
-        //save the current thread number
-        //current = current_running_tid;
-        //get the next thread in our array, if we're at the end then we go back to 0
-        //current_running_tid = thread_id;
-
-        
-
-        //swap to that thread so that it finishes faster
-        //swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
-        //allow us to be interrupted again and pray the next line runs before another interrupt
-
+        //yield until our process isn't active anymore
         threadYield(); 
-        //interruptEnable();
         
     }
     interruptDisable();
     current_running_tid = temp;
-    //if the thread has exited then this value will be true. 
-    //if false then the thread never existed. just like my work ethic in an engl class
-        //free the threads context cause we done with it
-    //free(thread_lib[thread_id].thread_context.uc_stack.ss_sp);
-    //save the results
+    //if the value wasn't null then return the result of the thread
     if(exited_lib[thread_id] != NULL)
         *result = exited_lib[thread_id];
     thread_lib[thread_id].isExited = true;
@@ -287,7 +275,7 @@ extern void threadExit(void *result){
 extern void threadLock(int lockNum){
     int current;
     if(!interruptsAreDisabled)interruptDisable();
-    //printf("in thread lock; %d\n", current_running_tid);
+    
     //if not lock. lock it.
     if(!lock[lockNum].isLocked){
         lock[lockNum].isLocked = true;
@@ -309,16 +297,17 @@ extern void threadLock(int lockNum){
             
         }
         interruptDisable();
-        //grab it
+        //grab the lock
         lock[lockNum].isLocked = true;
         lock[lockNum].thread_id = current_running_tid;
         interruptEnable();
     }
 }
-//should unlock
+
+//should unlock 
 extern void threadUnlock(int lockNum){
     if(!interruptsAreDisabled)interruptDisable();
-    //if we hold the lock, unlock it
+    //if the current running thread holds the lock, unlock it
     if(lock[lockNum].thread_id == current_running_tid){
         lock[lockNum].isLocked = false;
         lock[lockNum].thread_id = -1;
@@ -339,16 +328,21 @@ extern void threadWait(int lockNum, int conditionNum){
         //if that condition isnt true then wait until it is
         enqueue(current_running_tid, lockNum, conditionNum);
         
+        //this function checks to see if the current thread has been signalled to run
         while(!condition_signalled(current_running_tid, lockNum, conditionNum)){
+            //if not then yield to another thread
             interruptEnable();
             threadYield();
             interruptDisable();
         }
+        /*if multiple threads are called then this checks to make sure the current thread is 
+        the first in the queue*/
         while(!first_in_queue(lockNum, conditionNum)){
             interruptEnable();
             threadYield();
             interruptDisable();
         }
+        //once it's been signalled, lock and dequeue the thread from the queue
         threadLock(lockNum);
         interruptDisable();
         dequeue(lockNum, conditionNum);
@@ -358,6 +352,8 @@ extern void threadWait(int lockNum, int conditionNum){
 //sets the condition to true for that lock
 extern void threadSignal(int lockNum, int conditionNum){
     queue* q = condition[lockNum][conditionNum];
+    //loop through the queue and signal the next thread that hasn't been signalled
+    //will calmly exit if no threads are in the queue
     while(q->next != NULL){
         q = q->next;
         if(q->is_signalled == false){
@@ -381,12 +377,12 @@ int next_thread(){
     return i;
 }
 
-/* okay so apparently i get a bunch of seg faults when i pass a function into make context and run it
-because the computer has no idea what to do after it finishes. so i decided to make a wrapper function
+/* make a wrapper function
 so that the func when finished will have a path to keep going down after its done
 then it will call thread exit which take care of carefully and completely disembowling everything 
 that thread used to be and throwing it away*/
 void wrapper_function(thFuncPtr func, void* parameter){
+
     interruptEnable();
     void * result = func(parameter);
     interruptDisable();
@@ -394,12 +390,9 @@ void wrapper_function(thFuncPtr func, void* parameter){
         exited_lib[current_running_tid] = result;
     }
     thread_lib[current_running_tid].active = false;
-    //int current = current_running_tid;
-    //current_running_tid = main_thread;
-    //thread_lib[current_running_tid].isExited = true;
+    
     interruptEnable();
 
-    //swapcontext(&(thread_lib[current].thread_context), &(thread_lib[current_running_tid].thread_context));
     threadYield();
 }
 
@@ -415,16 +408,7 @@ static void interruptEnable () {
     interruptsAreDisabled = 0;
 }
 
-bool is_in_queue(int thread_id, int lock, int conditional){
-    queue *q = condition[lock][conditional];
-    while(q != NULL){
-        if(q->thread_id == current_running_tid)
-            return true;
-        q = q->next;
-    }
-    return false;
-}
-
+//checks to see if the thread_id has been signalled to run
 bool condition_signalled(int thread_id, int lock, int conditional){
     queue *q = condition[lock][conditional];
     while(q != NULL){
@@ -435,6 +419,7 @@ bool condition_signalled(int thread_id, int lock, int conditional){
     return false;
 }
 
+//a basic enqueue function for the linked list
 void enqueue(int thread_id, int lock, int conditional){
     queue *q = condition[lock][conditional];
     queue *new_node = malloc(sizeof(queue));
@@ -447,6 +432,7 @@ void enqueue(int thread_id, int lock, int conditional){
     q->next = new_node;
 }
 
+//basic dequeue
 void dequeue(int lock, int conditional){
     queue *q = condition[lock][conditional];
     if(q->next == NULL){
@@ -458,6 +444,7 @@ void dequeue(int lock, int conditional){
     free(next);
 }
 
+//returns if the current_running_tid is the first thread in the queue and ready to be dequeued
 bool first_in_queue(int lockNum, int conditional){
     queue *q = condition[lockNum][conditional];
     return q->next->thread_id == current_running_tid;
