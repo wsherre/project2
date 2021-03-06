@@ -64,6 +64,6 @@ int main(){
   printf("joined #3 --> %d. (should be 20)\n", *result1);
 
   threadJoin(id5, (void *)&result1);
-  printf("joined #5 --> %d. (should be 17)\n", *result1);
+  printf("joined #5 --> %d. (should be 20)\n", *result1);
   
 }
