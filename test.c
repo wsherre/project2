@@ -30,7 +30,7 @@ int main(){
   int p1;
   int p2;
 
-  int array[3000];
+  int array[400];
 
   p1 = 0;
   p2 = 0; 
@@ -53,13 +53,9 @@ int main(){
     printf("%d %d\n", *result1, i);
 
   }
+  //num should be 0
   printf("num %d\n", num);
+  //test already exited thread
   threadExit((void*)&result2);
-  /*id1 = threadCreate(t, NULL);
-  id2 = threadCreate(t1, NULL);
-  threadJoin(id1, (void *)&result1);
-  printf("thread1: %d\n", num);
-  threadJoin(id2, (void *)&result1);
-  threadYield();
-  printf("thread2: %d\n", num);*/
+  
 }

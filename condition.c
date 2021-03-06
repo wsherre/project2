@@ -12,17 +12,17 @@ void *t(void* arg){
 void *t2(void* arg){
     threadLock(5);
     threadWait(5, 8);
-    *((int *)arg) += 2;
+    *((int *)arg) += 5;
     threadUnlock(5);
     return arg;
 }
 void *t1(void*arg){
-    //threadYield();
     threadSignal(0, 5);
     threadSignal(0,5);
-    //threadYield();
+    threadYield();
     threadSignal(5, 8);
-    threadSignal(5, 8);threadSignal(5, 9);
+    threadSignal(5, 8);
+    threadSignal(5, 9);
     return NULL;
 }
 
@@ -51,19 +51,19 @@ int main(){
   id4 = threadCreate(t2, (void*)&p4);
   id5 = threadCreate(t1, (void*)&p1);
 
-  threadJoin(id4, (void *)&result1);
-  printf("joined #4 --> %d.\n", *result1);
-
   threadJoin(id1, (void *)&result1);
-  printf("joined #1 --> %d.\n", *result1);
+  printf("joined #1 --> %d. (should be 2) \n", *result1);
 
   threadJoin(id2, (void *)&result1);
-  printf("joined #2 --> %d.\n", *result1);
+  printf("joined #2 --> %d. (should be 7)\n", *result1);
 
   threadJoin(id3, (void *)&result1);
-  printf("joined #3 --> %d.\n", *result1);
+  printf("joined #2 --> %d. (should be 15)\n", *result1);
+
+  threadJoin(id4, (void *)&result1);
+  printf("joined #3 --> %d. (should be 20)\n", *result1);
 
   threadJoin(id5, (void *)&result1);
-  printf("joined #5 --> %d.\n", *result1);
+  printf("joined #5 --> %d. (should be 17)\n", *result1);
   
 }
