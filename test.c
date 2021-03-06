@@ -50,10 +50,10 @@ int main(){
 
   for(int i = 1; i < 201; ++i){
     threadJoin(i, (void *)&result1);
-    printf("%d %d\n", *result1, i);
-
+    //every result should be 100
+    printf("Result: %d  Thread ID: %d\n", *result1, i);
   }
-  //num should be 0
+  //num should be 100
   printf("num %d\n", num);
   //test already exited thread
   threadExit((void*)&result2);
